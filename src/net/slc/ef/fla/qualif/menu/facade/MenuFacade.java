@@ -4,6 +4,7 @@ import net.slc.ef.fla.qualif.menu.Menu;
 import net.slc.ef.fla.qualif.menu.state.MenuState;
 
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
 
 public class MenuFacade {
 
@@ -27,4 +28,13 @@ public class MenuFacade {
         return read;
     }
 
+    public void promptEnterKey() {
+        System.out.println("Press \"ENTER\" to continue...");
+        scanner.nextLine();
+    }
+
+    public void shutdown() {
+        this.scanner.close();
+        this.menu.getExecutorServices().forEach(ExecutorService::shutdownNow);
+    }
 }

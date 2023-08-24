@@ -4,7 +4,15 @@ import net.slc.ef.fla.qualif.menu.Menu;
 
 public class Main {
 
+    private Menu menu;
+
     public Main() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (menu != null) {
+                menu.getMenuFacade().shutdown();
+            }
+        }));
+
         this.start();
     }
 
@@ -13,7 +21,7 @@ public class Main {
     }
 
     private void start() {
-        new Menu(this);
+        this.menu = new Menu(this);
     }
 
 }

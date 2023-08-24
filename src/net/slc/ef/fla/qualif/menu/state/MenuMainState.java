@@ -1,6 +1,7 @@
 package net.slc.ef.fla.qualif.menu.state;
 
 import net.slc.ef.fla.qualif.menu.Menu;
+import net.slc.ef.fla.qualif.utils.Utils;
 
 public class MenuMainState extends MenuState {
 
@@ -10,16 +11,21 @@ public class MenuMainState extends MenuState {
 
     @Override
     public void onEnter() {
-        System.out.println("1. Play New Restaurant");
-        System.out.println("2. High Score");
-        System.out.println("3. Exit");
-        System.out.print(">> ");
+        Utils.clearScreen();
+        System.out.println("Welcome to Restaurant Tycoon!");
 
+        menu.getMenuFacade().promptEnterKey();
         this.onTick();
     }
 
     @Override
     public void onTick() {
+        Utils.clearScreen();
+        System.out.println("1. Play New Restaurant");
+        System.out.println("2. High Score");
+        System.out.println("3. Exit");
+        System.out.print(">> ");
+
         String input = menu.getMenuFacade().readString();
         switch (input) {
             case "1":
@@ -32,14 +38,12 @@ public class MenuMainState extends MenuState {
                 this.switchState(new MenuExitState(menu));
                 break;
             default:
-                System.out.println("Invalid input!");
-                this.onEnter();
+                this.onTick();
                 break;
         }
     }
 
     @Override
     public void onExit() {
-
     }
 }
