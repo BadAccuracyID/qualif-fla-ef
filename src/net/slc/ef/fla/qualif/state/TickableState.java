@@ -10,6 +10,8 @@ public abstract class TickableState extends MasterState {
 
     public abstract void onTick();
 
+    protected abstract void switchState(TickableState state);
+
     protected abstract void addExecutor(ExecutorService executor);
 
     protected abstract void removeExecutor(ExecutorService executor);

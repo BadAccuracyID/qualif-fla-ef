@@ -1,7 +1,6 @@
 package net.slc.ef.fla.qualif.game.state;
 
 import net.slc.ef.fla.qualif.game.Game;
-import net.slc.ef.fla.qualif.state.MasterState;
 import net.slc.ef.fla.qualif.state.TickableState;
 
 import java.util.concurrent.ExecutorService;
@@ -15,7 +14,7 @@ public abstract class GameState extends TickableState {
     }
 
     @Override
-    protected void switchState(MasterState state) {
+    protected void switchState(TickableState state) {
         this.game.getGameFacade().switchGameState(state);
     }
 
