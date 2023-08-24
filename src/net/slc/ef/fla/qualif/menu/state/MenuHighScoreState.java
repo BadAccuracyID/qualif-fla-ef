@@ -13,11 +13,6 @@ public class MenuHighScoreState extends MenuState {
     }
 
     @Override
-    public void onTick() {
-
-    }
-
-    @Override
     public void onExit() {
 
     }

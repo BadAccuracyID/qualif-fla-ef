@@ -15,11 +15,10 @@ public class MenuMainState extends MenuState {
         System.out.println("Welcome to Restaurant Tycoon!");
 
         menu.getMenuFacade().promptEnterKey();
-        this.onTick();
+        this.sendMenu();
     }
 
-    @Override
-    public void onTick() {
+    private void sendMenu() {
         Utils.clearScreen();
         System.out.println("1. Play New Restaurant");
         System.out.println("2. High Score");
@@ -38,7 +37,7 @@ public class MenuMainState extends MenuState {
                 this.switchState(new MenuExitState(menu));
                 break;
             default:
-                this.onTick();
+                this.sendMenu();
                 break;
         }
     }

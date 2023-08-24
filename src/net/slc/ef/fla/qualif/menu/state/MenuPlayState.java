@@ -15,11 +15,6 @@ public class MenuPlayState extends MenuState {
     }
 
     @Override
-    public void onTick() {
-
-    }
-
-    @Override
     public void onExit() {
 
     }

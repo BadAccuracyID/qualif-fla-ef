@@ -14,11 +14,6 @@ public class MenuExitState extends MenuState {
     }
 
     @Override
-    public void onTick() {
-
-    }
-
-    @Override
     public void onExit() {
 
     }
