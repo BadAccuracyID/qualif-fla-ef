@@ -20,6 +20,10 @@ public class Main {
         new Main();
     }
 
+    public Menu getMenu() {
+        return menu;
+    }
+
     private void start() {
         this.menu = new Menu(this);
     }

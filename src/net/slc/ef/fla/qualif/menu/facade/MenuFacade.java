@@ -1,7 +1,7 @@
 package net.slc.ef.fla.qualif.menu.facade;
 
+import net.slc.ef.fla.qualif.state.MasterState;
 import net.slc.ef.fla.qualif.menu.Menu;
-import net.slc.ef.fla.qualif.menu.state.MenuState;
 
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -16,7 +16,7 @@ public class MenuFacade {
         this.scanner = new Scanner(System.in);
     }
 
-    public void switchMenuState(MenuState state) {
+    public void switchMenuState(MasterState state) {
         this.menu.getCurrentState().onExit();
 
         this.menu.setCurrentState(state);
@@ -24,8 +24,7 @@ public class MenuFacade {
     }
 
     public String readString() {
-        String read = scanner.nextLine();
-        return read;
+        return scanner.nextLine();
     }
 
     public void promptEnterKey() {

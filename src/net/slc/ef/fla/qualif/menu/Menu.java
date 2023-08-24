@@ -1,9 +1,9 @@
 package net.slc.ef.fla.qualif.menu;
 
 import net.slc.ef.fla.qualif.Main;
+import net.slc.ef.fla.qualif.state.MasterState;
 import net.slc.ef.fla.qualif.menu.facade.MenuFacade;
 import net.slc.ef.fla.qualif.menu.state.MenuMainState;
-import net.slc.ef.fla.qualif.menu.state.MenuState;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +14,7 @@ public class Menu {
     private final Main main;
     private final MenuFacade menuFacade;
     private final Set<ExecutorService> executorServices;
-    private MenuState currentState;
+    private MasterState currentState;
 
     public Menu(Main main) {
         this.main = main;
@@ -25,11 +25,11 @@ public class Menu {
         this.getCurrentState().onEnter();
     }
 
-    public MenuState getCurrentState() {
+    public MasterState getCurrentState() {
         return currentState;
     }
 
-    public void setCurrentState(MenuState currentState) {
+    public void setCurrentState(MasterState currentState) {
         this.currentState = currentState;
     }
 
