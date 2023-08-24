@@ -1,7 +1,7 @@
 package net.slc.ef.fla.qualif.game.facade;
 
-import net.slc.ef.fla.qualif.state.MasterState;
 import net.slc.ef.fla.qualif.game.Game;
+import net.slc.ef.fla.qualif.state.TickableState;
 
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -16,7 +16,7 @@ public class GameFacade {
         this.scanner = new Scanner(System.in);
     }
 
-    public void switchGameState(MasterState state) {
+    public void switchGameState(TickableState state) {
         // todo
     }
 
