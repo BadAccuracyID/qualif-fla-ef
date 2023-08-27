@@ -1,6 +1,5 @@
 package net.slc.ef.fla.qualif.async;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -9,16 +8,16 @@ import java.util.function.Supplier;
 public class ASExecutor {
 
     private final Supplier<ScheduledExecutorService> executorSupplier;
-    private final Callable<Void> task;
+    private final Runnable runnable;
     private final long delay;
     private final long period;
     private final TimeUnit timeUnit;
     private Predicate<Void> runningCondition;
     private ScheduledExecutorService executor;
 
-    private ASExecutor(Supplier<ScheduledExecutorService> executorSupplier, Callable<Void> task, long delay, long period, TimeUnit timeUnit, Predicate<Void> runningCondition) {
+    private ASExecutor(Supplier<ScheduledExecutorService> executorSupplier, Runnable runnable, long delay, long period, TimeUnit timeUnit, Predicate<Void> runningCondition) {
         this.executorSupplier = executorSupplier;
-        this.task = task;
+        this.runnable = runnable;
         this.delay = delay;
         this.period = period;
         this.timeUnit = timeUnit;
@@ -37,42 +36,27 @@ public class ASExecutor {
     public void check() {
         if (runningCondition != null && runningCondition.test(null)) {
             if (executor == null) {
-                System.out.println("Starting executor");
                 executor = executorSupplier.get();
-                System.out.println("Executor got");
-
-                System.out.println("Scheduling task");
-                executor.scheduleAtFixedRate(() -> {
-                    try {
-                        task.call();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }, delay, period, timeUnit);
-                System.out.println("Task scheduled");
+                executor.scheduleAtFixedRate(runnable, delay, period, timeUnit);
             }
         } else {
             if (executor != null) {
-                System.out.println("Shutting down executor");
                 executor.shutdown();
                 executor = null;
-                System.out.println("Executor shut down");
             }
         }
     }
 
     public void shutdown() {
         if (executor != null) {
-            System.out.println("Killing executor");
             executor.shutdownNow();
             executor = null;
-            System.out.println("Executor killed");
         }
     }
 
     public static class ASExecutorBuilder {
         private Supplier<ScheduledExecutorService> executor;
-        private Callable<Void> task;
+        private Runnable runnable;
         private long delay = 0;
         private long period = 1;
         private TimeUnit timeUnit = TimeUnit.SECONDS;
@@ -84,8 +68,8 @@ public class ASExecutor {
             return this;
         }
 
-        public ASExecutorBuilder task(Callable<Void> task) {
-            this.task = task;
+        public ASExecutorBuilder task(Runnable runnable) {
+            this.runnable = runnable;
             return this;
         }
 
@@ -110,7 +94,7 @@ public class ASExecutor {
         }
 
         public ASExecutor build() {
-            return new ASExecutor(executor, task, delay, period, timeUnit, runningCondition);
+            return new ASExecutor(executor, runnable, delay, period, timeUnit, runningCondition);
         }
     }
 

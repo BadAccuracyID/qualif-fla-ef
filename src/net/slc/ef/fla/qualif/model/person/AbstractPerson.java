@@ -16,10 +16,6 @@ public abstract class AbstractPerson {
         return restaurant;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getInitial() {
         return initial;
     }
