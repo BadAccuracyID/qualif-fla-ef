@@ -2,15 +2,14 @@ package net.slc.ef.fla.qualif.model.person;
 
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 
-public abstract class Person {
+public abstract class AbstractPerson {
 
     private final Restaurant restaurant;
-    private final String name;
-    private String initial;
+    private final String initial;
 
-    public Person(Restaurant restaurant, String name) {
+    public AbstractPerson(Restaurant restaurant, String initial) {
         this.restaurant = restaurant;
-        this.name = name;
+        this.initial = initial;
     }
 
     public Restaurant getRestaurant() {
@@ -23,10 +22,6 @@ public abstract class Person {
 
     public String getInitial() {
         return initial;
-    }
-
-    public void setInitial(String initial) {
-        this.initial = initial;
     }
 
 }

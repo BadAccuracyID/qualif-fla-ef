@@ -1,16 +1,16 @@
 package net.slc.ef.fla.qualif.model.person.server;
 
-import net.slc.ef.fla.qualif.model.person.Person;
+import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
 
-public class Server extends Person {
+public class Server extends AbstractPerson {
 
     private final ServerFacade serverFacade;
     private TickableState state;
 
-    public Server(Restaurant restaurant, String name) {
-        super(restaurant, name);
+    public Server(Restaurant restaurant, String initial) {
+        super(restaurant, initial);
         this.serverFacade = new ServerFacade(this);
     }
 
