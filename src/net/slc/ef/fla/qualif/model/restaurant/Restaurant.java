@@ -1,19 +1,16 @@
 package net.slc.ef.fla.qualif.model.restaurant;
 
-import net.slc.ef.fla.qualif.async.ASExecutor;
 import net.slc.ef.fla.qualif.async.ASExecutorManager;
 import net.slc.ef.fla.qualif.model.person.cook.Cook;
 import net.slc.ef.fla.qualif.model.person.server.Server;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
-import net.slc.ef.fla.qualif.model.restaurant.task.PrinterTask;
-import net.slc.ef.fla.qualif.model.restaurant.task.ScannerTask;
+import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantRunningState;
+import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantState;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Restaurant {
 
@@ -30,10 +27,9 @@ public class Restaurant {
 
     private final List<ExecutorService> executorServices;
     private final ASExecutorManager asExecutorManager;
-
+    private RestaurantState state;
     private int money;
     private int score;
-    private boolean paused = false;
 
     private Restaurant(String name, List<ExecutorService> executorServices) {
         this.name = name;
@@ -43,6 +39,7 @@ public class Restaurant {
         this.restaurantFacade = new RestaurantFacade(this);
         this.executorServices = executorServices;
         this.asExecutorManager = new ASExecutorManager();
+        this.state = new RestaurantRunningState(this);
 
         this.money = 0;
         this.score = 0;
@@ -64,41 +61,14 @@ public class Restaurant {
         instance = null;
     }
 
-    public void start() {
-        asExecutorManager.addExecutor(
-                ASExecutor.builder()
-                        .executor(Executors::newSingleThreadScheduledExecutor)
-                        .task(new PrinterTask(this))
-                        .delay(0)
-                        .period(1)
-                        .timeUnit(TimeUnit.SECONDS)
-                        .runningCondition((ignored) -> !paused)
-                        .build()
-        );
-        asExecutorManager.addExecutor(
-                ASExecutor.builder()
-                        .executor(Executors::newSingleThreadScheduledExecutor)
-                        .task(new ScannerTask(this))
-                        .delay(0)
-                        .period(1)
-                        .timeUnit(TimeUnit.SECONDS)
-                        .runningCondition((ignored) -> !paused)
-                        .build()
-        );
+    public ASExecutorManager getAsExecutorManager() {
+        return asExecutorManager;
     }
 
-    public void pause() {
-        paused = !paused;
+    public void end() {
+        asExecutorManager.shutdown();
+        destroy();
     }
-
-    public boolean isPaused() {
-        return paused;
-    }
-
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
-
 
     public String getName() {
         return name;
@@ -114,6 +84,14 @@ public class Restaurant {
 
     public List<Cook> getCooks() {
         return cooks;
+    }
+
+    public RestaurantState getState() {
+        return state;
+    }
+
+    public void setState(RestaurantState state) {
+        this.state = state;
     }
 
     public int getMoney() {

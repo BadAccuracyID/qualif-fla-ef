@@ -1,5 +1,6 @@
 package net.slc.ef.fla.qualif.model.restaurant;
 
+import net.slc.ef.fla.qualif.async.ASExecutor;
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.PersonFactory;
 import net.slc.ef.fla.qualif.model.person.PersonInitialGenerator;
@@ -9,11 +10,17 @@ import net.slc.ef.fla.qualif.model.person.server.Server;
 import net.slc.ef.fla.qualif.model.person.server.ServerFactory;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.chair.ChairStatus;
+import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantRunningState;
+import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantState;
+import net.slc.ef.fla.qualif.model.restaurant.task.PrinterTask;
+import net.slc.ef.fla.qualif.model.restaurant.task.ScannerTask;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class RestaurantFacade {
@@ -37,6 +44,28 @@ public class RestaurantFacade {
         restaurant.getExecutorServices().remove(executor);
     }
 
+    public void start() {
+        restaurant.getAsExecutorManager().addExecutor(
+                ASExecutor.builder()
+                        .executor(Executors::newSingleThreadScheduledExecutor)
+                        .task(new PrinterTask(restaurant))
+                        .delay(0)
+                        .period(1)
+                        .timeUnit(TimeUnit.SECONDS)
+                        .runningCondition((ignored) -> this.isState(RestaurantRunningState.class))
+                        .build()
+        );
+        restaurant.getAsExecutorManager().addExecutor(
+                ASExecutor.builder()
+                        .executor(Executors::newSingleThreadScheduledExecutor)
+                        .task(new ScannerTask(restaurant))
+                        .delay(0)
+                        .period(1)
+                        .timeUnit(TimeUnit.SECONDS)
+                        .runningCondition((ignored) -> true)
+                        .build()
+        );
+    }
 
     public List<AbstractPerson> getPersons() {
         List<AbstractPerson> persons = new ArrayList<>();
@@ -100,6 +129,15 @@ public class RestaurantFacade {
 
     public void removeScore(int score) {
         this.restaurant.setScore(this.restaurant.getScore() - score);
+    }
+
+    public void switchState(RestaurantState state) {
+        this.restaurant.setState(state);
+        this.restaurant.getState().onEnter();
+    }
+
+    public boolean isState(Class<? extends RestaurantState> clazz) {
+        return this.restaurant.getState().getClass().equals(clazz);
     }
 
 }

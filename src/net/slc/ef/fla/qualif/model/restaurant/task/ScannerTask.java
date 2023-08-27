@@ -16,8 +16,7 @@ public class ScannerTask implements Runnable {
 
     @Override
     public void run() {
-        // if press enter, then pause
-        scanner.nextLine();
-        restaurant.setPaused(!restaurant.isPaused());
+        String input = scanner.nextLine();
+        restaurant.getState().processInput(input);
     }
 }

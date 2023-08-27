@@ -30,7 +30,7 @@ public class Main {
     private void start() {
 //        this.menu = new Menu(this);
         Restaurant ef = Restaurant.getInstance("EF", new ArrayList<>());
-        ef.start();
+        ef.getRestaurantFacade().start();
     }
 
 }
