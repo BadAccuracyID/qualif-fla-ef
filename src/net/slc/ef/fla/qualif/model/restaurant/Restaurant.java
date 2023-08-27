@@ -4,7 +4,7 @@ import net.slc.ef.fla.qualif.async.ASExecutorManager;
 import net.slc.ef.fla.qualif.model.person.cook.Cook;
 import net.slc.ef.fla.qualif.model.person.server.Server;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
-import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantRunningState;
+import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantInitializationState;
 import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantState;
 
 import java.lang.ref.WeakReference;
@@ -39,7 +39,7 @@ public class Restaurant {
         this.restaurantFacade = new RestaurantFacade(this);
         this.executorServices = executorServices;
         this.asExecutorManager = new ASExecutorManager();
-        this.state = new RestaurantRunningState(this);
+        this.state = new RestaurantInitializationState(this);
 
         this.money = 0;
         this.score = 0;
@@ -63,11 +63,6 @@ public class Restaurant {
 
     public ASExecutorManager getAsExecutorManager() {
         return asExecutorManager;
-    }
-
-    public void end() {
-        asExecutorManager.shutdown();
-        destroy();
     }
 
     public String getName() {

@@ -12,7 +12,7 @@ public class RestaurantInitializationState extends RestaurantState {
     public void onEnter() {
         System.out.println("This is some beautiful splash screen!");
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2500);
         } catch (InterruptedException e) {
             System.err.println("No way you messed this up lmao");
             e.printStackTrace();
