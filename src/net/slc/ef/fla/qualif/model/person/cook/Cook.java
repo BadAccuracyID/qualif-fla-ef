@@ -14,6 +14,11 @@ public class Cook extends AbstractPerson {
         this.cookFacade = new CookFacade(this);
     }
 
+    @Override
+    public void tick() {
+
+    }
+
     public CookFacade getCookFacade() {
         return cookFacade;
     }

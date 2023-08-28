@@ -20,4 +20,6 @@ public abstract class AbstractPerson {
         return initial;
     }
 
+    public abstract void tick();
+
 }

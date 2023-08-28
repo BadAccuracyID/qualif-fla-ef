@@ -14,6 +14,11 @@ public class Customer extends AbstractPerson {
         this.customerFacade = new CustomerFacade(this);
     }
 
+    @Override
+    public void tick() {
+
+    }
+
     public CustomerFacade getCustomerFacade() {
         return customerFacade;
     }

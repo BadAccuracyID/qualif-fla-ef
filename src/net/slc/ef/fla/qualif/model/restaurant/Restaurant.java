@@ -25,29 +25,28 @@ public class Restaurant {
 
     private final RestaurantFacade restaurantFacade;
 
-    private final List<ExecutorService> executorServices;
     private final ASExecutorManager asExecutorManager;
     private RestaurantState state;
     private int money;
     private int score;
 
-    private Restaurant(String name, List<ExecutorService> executorServices) {
+    private Restaurant(String name) {
         this.name = name;
         this.chairs = new ArrayList<>();
         this.servers = new ArrayList<>();
         this.cooks = new ArrayList<>();
         this.restaurantFacade = new RestaurantFacade(this);
-        this.executorServices = executorServices;
         this.asExecutorManager = new ASExecutorManager();
         this.state = new RestaurantInitializationState(this);
+        this.state.onEnter();
 
         this.money = 0;
         this.score = 0;
     }
 
-    public static Restaurant getInstance(String name, List<ExecutorService> executorServices) {
+    public static Restaurant getInstance(String name) {
         if (instance == null || instance.get() == null) {
-            instance = new WeakReference<>(new Restaurant(name, executorServices));
+            instance = new WeakReference<>(new Restaurant(name));
         }
 
         return instance.get();
@@ -107,10 +106,6 @@ public class Restaurant {
 
     public RestaurantFacade getRestaurantFacade() {
         return restaurantFacade;
-    }
-
-    public List<ExecutorService> getExecutorServices() {
-        return executorServices;
     }
 
 }

@@ -14,6 +14,11 @@ public class Server extends AbstractPerson {
         this.serverFacade = new ServerFacade(this);
     }
 
+    @Override
+    public void tick() {
+
+    }
+
     public TickableState getState() {
         return state;
     }

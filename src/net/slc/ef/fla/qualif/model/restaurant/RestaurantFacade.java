@@ -12,8 +12,8 @@ import net.slc.ef.fla.qualif.model.person.server.ServerFactory;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.chair.ChairStatus;
 import net.slc.ef.fla.qualif.model.restaurant.state.*;
-import net.slc.ef.fla.qualif.model.restaurant.task.PrinterTask;
 import net.slc.ef.fla.qualif.model.restaurant.task.ScannerTask;
+import net.slc.ef.fla.qualif.model.restaurant.task.TickerTask;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -57,7 +57,7 @@ public class RestaurantFacade {
         restaurant.getAsExecutorManager().addExecutor(
                 ASExecutor.builder()
                         .executor(Executors::newSingleThreadScheduledExecutor)
-                        .task(new PrinterTask(restaurant))
+                        .task(new TickerTask(restaurant))
                         .delay(0)
                         .period(1)
                         .timeUnit(TimeUnit.SECONDS)
@@ -74,6 +74,7 @@ public class RestaurantFacade {
                         .runningCondition((ignored) -> true)
                         .build()
         );
+
     }
 
     public void end() {
@@ -85,13 +86,17 @@ public class RestaurantFacade {
         List<AbstractPerson> persons = new ArrayList<>();
         persons.addAll(this.getCustomers());
         persons.addAll(this.restaurant.getServers());
+        persons.addAll(this.restaurant.getCooks());
 
         return persons;
     }
 
 
     public List<Customer> getCustomers() {
-        return this.restaurant.getChairs().stream().filter(chair -> chair.getStatus() == ChairStatus.OCCUPIED).map(Chair::getCustomer).collect(Collectors.toList());
+        return this.restaurant.getChairs().stream()
+                .filter(chair -> chair.getStatus() == ChairStatus.OCCUPIED)
+                .map(Chair::getCustomer)
+                .collect(Collectors.toList());
     }
 
 

@@ -3,8 +3,6 @@ package net.slc.ef.fla.qualif;
 import net.slc.ef.fla.qualif.menu.Menu;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 
-import java.util.ArrayList;
-
 public class Main {
 
     private Menu menu;
@@ -29,7 +27,7 @@ public class Main {
 
     private void start() {
 //        this.menu = new Menu(this);
-        Restaurant ef = Restaurant.getInstance("EF", new ArrayList<>());
+        Restaurant ef = Restaurant.getInstance("EF");
         ef.getRestaurantFacade().start();
     }
 
