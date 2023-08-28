@@ -4,8 +4,8 @@ import net.slc.ef.fla.qualif.async.ASExecutor;
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.PersonFactory;
 import net.slc.ef.fla.qualif.model.person.PersonInitialGenerator;
-import net.slc.ef.fla.qualif.model.person.cook.Cook;
-import net.slc.ef.fla.qualif.model.person.cook.CookFactory;
+import net.slc.ef.fla.qualif.model.person.chef.Chef;
+import net.slc.ef.fla.qualif.model.person.chef.ChefFactory;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.CustomerFactory;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class RestaurantFacade {
 
     private final Restaurant restaurant;
-    private final PersonFactory customerFactory, waiterFactory, cookFactory;
+    private final PersonFactory customerFactory, waiterFactory, chefFactory;
     private final Map<Class<? extends RestaurantState>, RestaurantState> stateMap;
 
     public RestaurantFacade(Restaurant restaurant) {
@@ -36,7 +36,7 @@ public class RestaurantFacade {
         PersonInitialGenerator initialsGenerator = new PersonInitialGenerator(this.restaurant);
         this.customerFactory = new CustomerFactory(this.restaurant, initialsGenerator);
         this.waiterFactory = new WaiterFactory(this.restaurant, initialsGenerator);
-        this.cookFactory = new CookFactory(this.restaurant, initialsGenerator);
+        this.chefFactory = new ChefFactory(this.restaurant, initialsGenerator);
 
         this.stateMap = new HashMap<>();
         this.stateMap.put(RestaurantInitializationState.class, new RestaurantInitializationState(this.restaurant));
@@ -44,7 +44,7 @@ public class RestaurantFacade {
         this.stateMap.put(RestaurantPausedState.class, new RestaurantPausedState(this.restaurant));
         this.stateMap.put(RestaurantHiringState.class, new RestaurantHiringState(this.restaurant));
         this.stateMap.put(RestaurantUpgradingState.class, new RestaurantUpgradingState(this.restaurant));
-        this.stateMap.put(RestaurantUpgradeCookState.class, new RestaurantUpgradeCookState(this.restaurant));
+        this.stateMap.put(RestaurantUpgradeChefState.class, new RestaurantUpgradeChefState(this.restaurant));
         this.stateMap.put(RestaurantUpgradeWaiterState.class, new RestaurantUpgradeWaiterState(this.restaurant));
     }
 
@@ -90,8 +90,8 @@ public class RestaurantFacade {
         this.restaurant.getWaiters().add((Waiter) waiterFactory.create());
         this.restaurant.getWaiters().add((Waiter) waiterFactory.create());
 
-        this.restaurant.getCooks().add((Cook) cookFactory.create());
-        this.restaurant.getCooks().add((Cook) cookFactory.create());
+        this.restaurant.getChefs().add((Chef) chefFactory.create());
+        this.restaurant.getChefs().add((Chef) chefFactory.create());
     }
 
     public void end() {
@@ -103,7 +103,7 @@ public class RestaurantFacade {
         List<AbstractPerson> persons = new ArrayList<>();
         persons.addAll(this.getCustomers());
         persons.addAll(this.restaurant.getWaiters());
-        persons.addAll(this.restaurant.getCooks());
+        persons.addAll(this.restaurant.getChefs());
 
         return persons;
     }
@@ -226,8 +226,8 @@ public class RestaurantFacade {
         this.restaurant.getWaiters().add((Waiter) waiterFactory.create());
     }
 
-    public int calculateCookPrice() {
-        int size = this.restaurant.getCooks().size();
+    public int calculateChefPrice() {
+        int size = this.restaurant.getChefs().size();
         if (size >= 7) {
             return -1;
         }
@@ -235,12 +235,12 @@ public class RestaurantFacade {
         return size * 200;
     }
 
-    public void hireCook() {
+    public void hireChef() {
         // deduct money
-        int newCookPrice = this.calculateCookPrice();
-        this.removeMoney(newCookPrice);
+        int newChefPrice = this.calculateChefPrice();
+        this.removeMoney(newChefPrice);
 
-        this.restaurant.getCooks().add((Cook) cookFactory.create());
+        this.restaurant.getChefs().add((Chef) chefFactory.create());
     }
 
     public Waiter getIdlingWaiter() {

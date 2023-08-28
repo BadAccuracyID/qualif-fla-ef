@@ -1,7 +1,7 @@
 package net.slc.ef.fla.qualif.model.person.customer;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
-import net.slc.ef.fla.qualif.model.person.cook.Cook;
+import net.slc.ef.fla.qualif.model.person.chef.Chef;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
@@ -13,7 +13,7 @@ public class Customer extends AbstractPerson {
     private int tolerance;
 
     private Waiter waiter;
-    private Cook cook;
+    private Chef chef;
 
     public Customer(Restaurant restaurant, String name) {
         super(restaurant, name);
@@ -53,11 +53,11 @@ public class Customer extends AbstractPerson {
         this.waiter = waiter;
     }
 
-    public Cook getCook() {
-        return cook;
+    public Chef getChef() {
+        return chef;
     }
 
-    public void setCook(Cook cook) {
-        this.cook = cook;
+    public void setChef(Chef chef) {
+        this.chef = chef;
     }
 }

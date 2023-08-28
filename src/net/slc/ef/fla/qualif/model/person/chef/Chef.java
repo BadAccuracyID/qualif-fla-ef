@@ -1,21 +1,21 @@
-package net.slc.ef.fla.qualif.model.person.cook;
+package net.slc.ef.fla.qualif.model.person.chef;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
 
-public class Cook extends AbstractPerson {
+public class Chef extends AbstractPerson {
 
-    private final CookFacade cookFacade;
+    private final ChefFacade chefFacade;
     private TickableState state;
 
     private int skillLevel;
     private Customer servingCustomer;
 
-    public Cook(Restaurant restaurant, String name) {
+    public Chef(Restaurant restaurant, String name) {
         super(restaurant, name);
-        this.cookFacade = new CookFacade(this);
+        this.chefFacade = new ChefFacade(this);
     }
 
     @Override
@@ -23,8 +23,8 @@ public class Cook extends AbstractPerson {
 
     }
 
-    public CookFacade getCookFacade() {
-        return cookFacade;
+    public ChefFacade getChefFacade() {
+        return chefFacade;
     }
 
     public TickableState getState() {

@@ -1,7 +1,7 @@
 package net.slc.ef.fla.qualif.model.restaurant;
 
 import net.slc.ef.fla.qualif.async.ASExecutorManager;
-import net.slc.ef.fla.qualif.model.person.cook.Cook;
+import net.slc.ef.fla.qualif.model.person.chef.Chef;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.mediator.RestaurantMediator;
@@ -21,7 +21,7 @@ public class Restaurant {
     private final String name;
     private final List<Chair> chairs;
     private final List<Waiter> waiters;
-    private final List<Cook> cooks;
+    private final List<Chef> chefs;
 
     private final RestaurantFacade restaurantFacade;
     private final RestaurantMediator restaurantMediator;
@@ -35,7 +35,7 @@ public class Restaurant {
         this.name = name;
         this.chairs = new ArrayList<>();
         this.waiters = new ArrayList<>();
-        this.cooks = new ArrayList<>();
+        this.chefs = new ArrayList<>();
         this.restaurantFacade = new RestaurantFacade(this);
         this.restaurantMediator = new RestaurantMediator(this);
         this.asExecutorManager = new ASExecutorManager();
@@ -78,8 +78,8 @@ public class Restaurant {
         return waiters;
     }
 
-    public List<Cook> getCooks() {
-        return cooks;
+    public List<Chef> getChefs() {
+        return chefs;
     }
 
     public RestaurantState getState() {

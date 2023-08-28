@@ -29,6 +29,6 @@ public class CustomerEatState extends CustomerState {
         // customer is done eating, remove from chair
         RestaurantFacade restaurantFacade = customer.getRestaurant().getRestaurantFacade();
         restaurantFacade.removeCustomer(customer);
-        restaurantFacade.addScore(30 * customer.getCook().getSkillLevel());
+        restaurantFacade.addScore(30 * customer.getChef().getSkillLevel());
     }
 }

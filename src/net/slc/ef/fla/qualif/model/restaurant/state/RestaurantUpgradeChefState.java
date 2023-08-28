@@ -2,9 +2,9 @@ package net.slc.ef.fla.qualif.model.restaurant.state;
 
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 
-public class RestaurantUpgradeCookState extends RestaurantState {
+public class RestaurantUpgradeChefState extends RestaurantState {
 
-    public RestaurantUpgradeCookState(Restaurant restaurant) {
+    public RestaurantUpgradeChefState(Restaurant restaurant) {
         super(restaurant);
     }
 

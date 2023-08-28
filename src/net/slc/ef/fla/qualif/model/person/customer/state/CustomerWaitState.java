@@ -17,7 +17,7 @@ public class CustomerWaitState extends CustomerState {
 
     @Override
     public void onTick() {
-        if (customer.getWaiter() == null && customer.getCook() == null) {
+        if (customer.getWaiter() == null && customer.getChef() == null) {
             if (counter++ % 4 == 0) {
                 customer.getCustomerFacade().decreaseTolerance();
             }

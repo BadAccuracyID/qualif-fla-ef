@@ -1,7 +1,7 @@
 package net.slc.ef.fla.qualif.model.restaurant.task;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
-import net.slc.ef.fla.qualif.model.person.cook.Cook;
+import net.slc.ef.fla.qualif.model.person.chef.Chef;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
@@ -49,9 +49,9 @@ public class TickerTask implements Runnable {
             }
             System.out.print(" | ");
 
-            Cook cook;
-            if ((cook = this.getCook(restaurant.getCooks(), i)) != null) {
-                System.out.printf("<%-2s>, %13s<%-2s>", cook.getInitial(), "cook", cook.getInitial());
+            Chef chef;
+            if ((chef = this.getChef(restaurant.getChefs(), i)) != null) {
+                System.out.printf("<%-2s>, %13s<%-2s>", chef.getInitial(), "cook", chef.getInitial());
             } else {
                 System.out.print("                       ");
             }
@@ -74,9 +74,9 @@ public class TickerTask implements Runnable {
         // so, each customer is 1 line, and each waiter and cook is 1/2 line
         int personSize = restaurant.getRestaurantFacade().getCustomers().size();
         int waiterSize = (int) Math.ceil(restaurant.getWaiters().size() / 2.0);
-        int cookSize = (int) Math.ceil(restaurant.getCooks().size() / 2.0);
+        int chefSize = (int) Math.ceil(restaurant.getChefs().size() / 2.0);
 
-        return personSize + waiterSize + cookSize;
+        return personSize + waiterSize + chefSize;
     }
 
     private Customer getCustomer(List<Customer> list, int index) {
@@ -98,7 +98,7 @@ public class TickerTask implements Runnable {
         return list.get(index);
     }
 
-    private Cook getCook(List<Cook> list, int index) {
+    private Chef getChef(List<Chef> list, int index) {
         if (list.isEmpty()) {
             return null;
         }

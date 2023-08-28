@@ -1,16 +1,16 @@
-package net.slc.ef.fla.qualif.model.person.cook;
+package net.slc.ef.fla.qualif.model.person.chef;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.PersonFactory;
 import net.slc.ef.fla.qualif.model.person.PersonInitialGenerator;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 
-public class CookFactory implements PersonFactory {
+public class ChefFactory implements PersonFactory {
 
     private final Restaurant restaurant;
     private final PersonInitialGenerator initialsGenerator;
 
-    public CookFactory(Restaurant restaurant, PersonInitialGenerator initialsGenerator) {
+    public ChefFactory(Restaurant restaurant, PersonInitialGenerator initialsGenerator) {
         this.restaurant = restaurant;
         this.initialsGenerator = initialsGenerator;
     }
@@ -18,7 +18,7 @@ public class CookFactory implements PersonFactory {
     @Override
     public AbstractPerson create() {
         String initial = initialsGenerator.generateInitial();
-        return new Cook(restaurant, initial);
+        return new Chef(restaurant, initial);
     }
 
 

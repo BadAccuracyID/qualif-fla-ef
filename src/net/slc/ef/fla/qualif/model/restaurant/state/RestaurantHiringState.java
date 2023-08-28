@@ -21,8 +21,8 @@ public class RestaurantHiringState extends RestaurantState {
         int newWaiterPrice = restaurant.getRestaurantFacade().calculateWaiterPrice();
         System.out.printf("1. Hire Waiter (Rp. %s)\n", newWaiterPrice > 0 ? newWaiterPrice : "Max");
 
-        int newCookPrice = restaurant.getRestaurantFacade().calculateCookPrice();
-        System.out.printf("2. Hire Cook (Rp. %s)\n", newCookPrice > 0 ? newCookPrice : "Max");
+        int newChefPrice = restaurant.getRestaurantFacade().calculateChefPrice();
+        System.out.printf("2. Hire Cook (Rp. %s)\n", newChefPrice > 0 ? newChefPrice : "Max");
 
         System.out.println("3. Back to upgrade menu");
         System.out.print("> ");
@@ -47,19 +47,19 @@ public class RestaurantHiringState extends RestaurantState {
                 restaurant.getRestaurantFacade().hireWaiter();
                 break;
             case "2":
-                int newCookPrice = restaurant.getRestaurantFacade().calculateCookPrice();
-                if (newCookPrice < 0) {
+                int newChefPrice = restaurant.getRestaurantFacade().calculateChefPrice();
+                if (newChefPrice < 0) {
                     System.out.println("You have reached the maximum number of cooks");
                     break;
                 }
 
-                if (!restaurant.getRestaurantFacade().canPurchase(newCookPrice)) {
+                if (!restaurant.getRestaurantFacade().canPurchase(newChefPrice)) {
                     System.out.println("You don't have enough money");
                     break;
                 }
 
                 System.out.println("Hiring Cook");
-                restaurant.getRestaurantFacade().hireCook();
+                restaurant.getRestaurantFacade().hireChef();
                 break;
             case "3":
                 System.out.println("Back to upgrade menu");
