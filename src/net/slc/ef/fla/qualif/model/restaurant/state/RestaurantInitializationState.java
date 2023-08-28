@@ -18,7 +18,7 @@ public class RestaurantInitializationState extends RestaurantState {
             e.printStackTrace();
         }
 
-        restaurant.getRestaurantFacade().switchState(new RestaurantRunningState(restaurant));
+        restaurant.getRestaurantFacade().switchState(RestaurantRunningState.class);
     }
 
     @Override

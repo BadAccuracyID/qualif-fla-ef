@@ -27,13 +27,11 @@ public class RestaurantPausedState extends RestaurantState {
     public void processInput(String string) {
         switch (string) {
             case "1":
-                RestaurantRunningState runningState = new RestaurantRunningState(restaurant);
-                restaurant.getRestaurantFacade().switchState(runningState);
+                restaurant.getRestaurantFacade().switchState(RestaurantRunningState.class);
                 break;
             case "2":
                 System.out.println("Upgrading the restaurant");
-                RestaurantUpgradingState pausedState = new RestaurantUpgradingState(restaurant);
-                restaurant.getRestaurantFacade().switchState(pausedState);
+                restaurant.getRestaurantFacade().switchState(RestaurantUpgradingState.class);
                 break;
             case "3":
                 System.out.println("Exiting the restaurant");

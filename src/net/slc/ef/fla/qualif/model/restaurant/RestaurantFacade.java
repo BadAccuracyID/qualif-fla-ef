@@ -11,14 +11,11 @@ import net.slc.ef.fla.qualif.model.person.server.Server;
 import net.slc.ef.fla.qualif.model.person.server.ServerFactory;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.chair.ChairStatus;
-import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantRunningState;
-import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantState;
+import net.slc.ef.fla.qualif.model.restaurant.state.*;
 import net.slc.ef.fla.qualif.model.restaurant.task.PrinterTask;
 import net.slc.ef.fla.qualif.model.restaurant.task.ScannerTask;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +25,7 @@ public class RestaurantFacade {
 
     private final Restaurant restaurant;
     private final PersonFactory customerFactory, serverFactory, cookFactory;
+    private final Map<Class<? extends RestaurantState>, RestaurantState> stateMap;
 
     public RestaurantFacade(Restaurant restaurant) {
         this.restaurant = restaurant;
@@ -36,6 +34,15 @@ public class RestaurantFacade {
         this.customerFactory = new CustomerFactory(this.restaurant, initialsGenerator);
         this.serverFactory = new ServerFactory(this.restaurant, initialsGenerator);
         this.cookFactory = new ServerFactory(this.restaurant, initialsGenerator);
+
+        this.stateMap = new HashMap<>();
+        this.stateMap.put(RestaurantInitializationState.class, new RestaurantInitializationState(this.restaurant));
+        this.stateMap.put(RestaurantRunningState.class, new RestaurantRunningState(this.restaurant));
+        this.stateMap.put(RestaurantPausedState.class, new RestaurantPausedState(this.restaurant));
+        this.stateMap.put(RestaurantHiringState.class, new RestaurantHiringState(this.restaurant));
+        this.stateMap.put(RestaurantUpgradingState.class, new RestaurantUpgradingState(this.restaurant));
+        this.stateMap.put(RestaurantUpgradeCookState.class, new RestaurantUpgradeCookState(this.restaurant));
+        this.stateMap.put(RestaurantUpgradeWaiterState.class, new RestaurantUpgradeWaiterState(this.restaurant));
     }
 
     public void addExecutor(ExecutorService executor) {
@@ -143,7 +150,10 @@ public class RestaurantFacade {
         this.restaurant.setScore(this.restaurant.getScore() - score);
     }
 
-    public void switchState(RestaurantState state) {
+    public void switchState(Class<? extends RestaurantState> stateClass) {
+        RestaurantState state = this.stateMap.get(stateClass);
+        assert state != null;
+
         this.restaurant.setState(state);
         this.restaurant.getState().onEnter();
     }

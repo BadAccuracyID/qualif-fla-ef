@@ -51,23 +51,19 @@ public class RestaurantUpgradingState extends RestaurantState {
                 break;
             case "2":
                 System.out.println("Hiring more employees");
-                RestaurantHiringState hiringState = new RestaurantHiringState(restaurant);
-                restaurant.getRestaurantFacade().switchState(hiringState);
+                restaurant.getRestaurantFacade().switchState(RestaurantHiringState.class);
                 break;
             case "3":
                 System.out.println("Upgrading Waiter");
-                RestaurantUpgradeWaiterState upgradeWaiterState = new RestaurantUpgradeWaiterState(restaurant);
-                restaurant.getRestaurantFacade().switchState(upgradeWaiterState);
+                restaurant.getRestaurantFacade().switchState(RestaurantUpgradeWaiterState.class);
                 break;
             case "4":
                 System.out.println("Upgrading Cook");
-                RestaurantUpgradeCookState upgradeCookState = new RestaurantUpgradeCookState(restaurant);
-                restaurant.getRestaurantFacade().switchState(upgradeCookState);
+                restaurant.getRestaurantFacade().switchState(RestaurantUpgradeCookState.class);
                 break;
             case "5":
                 System.out.println("Back to pause menu");
-                RestaurantPausedState pausedState = new RestaurantPausedState(restaurant);
-                restaurant.getRestaurantFacade().switchState(pausedState);
+                restaurant.getRestaurantFacade().switchState(RestaurantPausedState.class);
                 break;
             default:
                 System.out.println("Unknown command");
