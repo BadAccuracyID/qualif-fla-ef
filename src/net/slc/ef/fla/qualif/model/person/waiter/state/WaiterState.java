@@ -1,6 +1,7 @@
 package net.slc.ef.fla.qualif.model.person.waiter.state;
 
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
+import net.slc.ef.fla.qualif.state.MasterState;
 import net.slc.ef.fla.qualif.state.TickableState;
 
 import java.util.concurrent.ExecutorService;
@@ -14,7 +15,7 @@ public abstract class WaiterState extends TickableState {
     }
 
     @Override
-    protected void switchState(TickableState state) {
+    public void switchState(TickableState state) {
         this.waiter.getWaiterFacade().switchState(state);
     }
 
@@ -26,5 +27,10 @@ public abstract class WaiterState extends TickableState {
     @Override
     protected void removeExecutor(ExecutorService executor) {
         this.waiter.getRestaurant().getRestaurantFacade().removeExecutor(executor);
+    }
+
+    @Override
+    public boolean isState(Class<? extends MasterState> clazz) {
+        return waiter.getState().getClass().equals(clazz);
     }
 }

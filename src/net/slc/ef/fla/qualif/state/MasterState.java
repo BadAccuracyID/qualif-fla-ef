@@ -8,4 +8,6 @@ public abstract class MasterState {
 
     protected abstract void switchState(MasterState state);
 
+    public abstract boolean isState(Class<? extends MasterState> clazz);
+
 }

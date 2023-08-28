@@ -32,7 +32,7 @@ public class TickerTask implements Runnable {
         System.out.println("          Customers          |          Waiters          |         Cooks          ");
         System.out.println("==================================================================================");
 
-        for (int i = 0; i < getLinesNeeded(); i++) {
+        for (int i = 0; i < this.getLinesNeeded(); i++) {
             Customer customer;
             if ((customer = this.getCustomer(restaurant.getRestaurantFacade().getCustomers(), i)) != null) {
                 System.out.printf("%-2s <%-2d>,%-5s<%-2s>", customer.getInitial(), customer.getTolerance(), "wait food", customer.getInitial());

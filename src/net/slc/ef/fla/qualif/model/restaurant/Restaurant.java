@@ -4,6 +4,7 @@ import net.slc.ef.fla.qualif.async.ASExecutorManager;
 import net.slc.ef.fla.qualif.model.person.cook.Cook;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
+import net.slc.ef.fla.qualif.model.restaurant.mediator.RestaurantMediator;
 import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantInitializationState;
 import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantState;
 
@@ -23,6 +24,7 @@ public class Restaurant {
     private final List<Cook> cooks;
 
     private final RestaurantFacade restaurantFacade;
+    private final RestaurantMediator restaurantMediator;
 
     private final ASExecutorManager asExecutorManager;
     private RestaurantState state;
@@ -35,6 +37,7 @@ public class Restaurant {
         this.waiters = new ArrayList<>();
         this.cooks = new ArrayList<>();
         this.restaurantFacade = new RestaurantFacade(this);
+        this.restaurantMediator = new RestaurantMediator(this);
         this.asExecutorManager = new ASExecutorManager();
         this.state = new RestaurantInitializationState(this);
         this.state.onEnter();
@@ -107,4 +110,7 @@ public class Restaurant {
         return restaurantFacade;
     }
 
+    public RestaurantMediator getRestaurantMediator() {
+        return restaurantMediator;
+    }
 }

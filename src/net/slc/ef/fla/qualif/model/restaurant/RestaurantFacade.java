@@ -10,6 +10,8 @@ import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.CustomerFactory;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.person.waiter.WaiterFactory;
+import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterIdleState;
+import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterWaitState;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.chair.ChairStatus;
 import net.slc.ef.fla.qualif.model.restaurant.state.*;
@@ -62,7 +64,7 @@ public class RestaurantFacade {
                         .delay(0)
                         .period(1)
                         .timeUnit(TimeUnit.SECONDS)
-                        .runningCondition((ignored) -> this.isState(RestaurantRunningState.class))
+                        .runningCondition((ignored) -> this.restaurant.getState().isState(RestaurantRunningState.class))
                         .build()
         );
         restaurant.getAsExecutorManager().addExecutor(
@@ -146,6 +148,16 @@ public class RestaurantFacade {
         this.getCustomers().add((Customer) customerFactory.create());
     }
 
+    public void removeCustomer(Customer customer) {
+        this.restaurant.getChairs().stream()
+                .filter(chair -> chair.getCustomer() == customer)
+                .findFirst()
+                .ifPresent(chair -> {
+                    chair.setStatus(ChairStatus.AVAILABLE);
+                    chair.setCustomer(null);
+                });
+    }
+
     public void addMoney(int money) {
         this.restaurant.setMoney(this.restaurant.getMoney() + money);
     }
@@ -177,10 +189,6 @@ public class RestaurantFacade {
 
         this.restaurant.setState(state);
         this.restaurant.getState().onEnter();
-    }
-
-    public boolean isState(Class<? extends RestaurantState> clazz) {
-        return this.restaurant.getState().getClass().equals(clazz);
     }
 
     public int calculateSeatPrice() {
@@ -233,6 +241,32 @@ public class RestaurantFacade {
         this.removeMoney(newCookPrice);
 
         this.restaurant.getCooks().add((Cook) cookFactory.create());
+    }
+
+    public Waiter getIdlingWaiter() {
+        List<Waiter> waiters = this.restaurant.getWaiters().stream()
+                .filter(waiter -> waiter.getState().isState(WaiterIdleState.class))
+                .collect(Collectors.toList());
+
+        if (waiters.isEmpty()) {
+            return null;
+        }
+
+        Random rand = new Random();
+        return waiters.get(rand.nextInt(waiters.size()));
+    }
+
+    public Waiter getWaitingWaiter() {
+        List<Waiter> waiters = this.restaurant.getWaiters().stream()
+                .filter(waiter -> waiter.getState().isState(WaiterWaitState.class))
+                .collect(Collectors.toList());
+
+        if (waiters.isEmpty()) {
+            return null;
+        }
+
+        Random rand = new Random();
+        return waiters.get(rand.nextInt(waiters.size()));
     }
 
 }
