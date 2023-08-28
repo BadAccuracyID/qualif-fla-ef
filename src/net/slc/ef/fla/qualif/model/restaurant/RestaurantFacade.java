@@ -6,6 +6,7 @@ import net.slc.ef.fla.qualif.model.person.PersonFactory;
 import net.slc.ef.fla.qualif.model.person.PersonInitialGenerator;
 import net.slc.ef.fla.qualif.model.person.chef.Chef;
 import net.slc.ef.fla.qualif.model.person.chef.ChefFactory;
+import net.slc.ef.fla.qualif.model.person.chef.state.ChefIdleState;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.CustomerFactory;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
@@ -267,6 +268,19 @@ public class RestaurantFacade {
 
         Random rand = new Random();
         return waiters.get(rand.nextInt(waiters.size()));
+    }
+
+    public Chef getIdlingChef() {
+        List<Chef> chefs = this.restaurant.getChefs().stream()
+                .filter(chef -> chef.getState().isState(ChefIdleState.class))
+                .collect(Collectors.toList());
+
+        if (chefs.isEmpty()) {
+            return null;
+        }
+
+        Random rand = new Random();
+        return chefs.get(rand.nextInt(chefs.size()));
     }
 
 }

@@ -19,7 +19,7 @@ public class WaiterServeState extends WaiterState {
     public void onTick() {
         delay--;
         if (delay <= 0) {
-            waiter.getRestaurant().getRestaurantMediator().notify(waiter.getServingCustomer(), MediatorAction.DELIVER_TO_CUSTOMER);
+            waiter.getRestaurant().getRestaurantMediator().notify(waiter, MediatorAction.DELIVER_TO_CUSTOMER);
             waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter));
         }
     }

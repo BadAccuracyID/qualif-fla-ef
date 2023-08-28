@@ -2,6 +2,8 @@ package net.slc.ef.fla.qualif.model.restaurant.mediator;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.chef.Chef;
+import net.slc.ef.fla.qualif.model.person.chef.state.ChefCookState;
+import net.slc.ef.fla.qualif.model.person.chef.state.ChefIdleState;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.state.CustomerEatState;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
@@ -29,8 +31,25 @@ public class RestaurantMediator {
                 }
 
                 assert sender instanceof Customer;
-                availableWaiter.setServingCustomer((Customer) sender);
+                Customer customer = (Customer) sender;
+
+                availableWaiter.setServingCustomer(customer);
                 availableWaiter.setState(new WaiterTakeOrderState(availableWaiter));
+                break;
+            }
+
+            case REQUEST_COOK: { // waiter wants to order
+                Chef availableChef = restaurantFacade.getIdlingChef();
+                if (availableChef == null) {
+                    return;
+                }
+
+                assert sender instanceof Waiter;
+                Waiter waiter = (Waiter) sender;
+
+                availableChef.setServingWaiter(waiter);
+                availableChef.setServingCustomer((waiter).getServingCustomer());
+                availableChef.setState(new ChefCookState(availableChef));
                 break;
             }
 
@@ -42,6 +61,9 @@ public class RestaurantMediator {
 
                 assert sender instanceof Chef;
                 Chef chef = (Chef) sender;
+
+                chef.setState(new ChefIdleState(chef));
+
                 availableWaiter.setServingChef(chef);
                 availableWaiter.setServingCustomer(chef.getServingCustomer());
                 availableWaiter.setState(new WaiterServeState(availableWaiter));
@@ -50,8 +72,8 @@ public class RestaurantMediator {
 
             case DELIVER_TO_CUSTOMER: { // delivering food from waiter to their customer
                 assert sender instanceof Waiter;
-
                 Waiter waiter = (Waiter) sender;
+
                 Customer customer = waiter.getServingCustomer();
                 customer.setChef(waiter.getServingChef());
                 customer.getCustomerFacade().switchState(new CustomerEatState(customer));
@@ -63,6 +85,5 @@ public class RestaurantMediator {
             }
         }
     }
-
 
 }
