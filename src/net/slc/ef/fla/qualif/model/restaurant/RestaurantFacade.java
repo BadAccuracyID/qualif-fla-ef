@@ -5,10 +5,11 @@ import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.PersonFactory;
 import net.slc.ef.fla.qualif.model.person.PersonInitialGenerator;
 import net.slc.ef.fla.qualif.model.person.cook.Cook;
+import net.slc.ef.fla.qualif.model.person.cook.CookFactory;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.CustomerFactory;
-import net.slc.ef.fla.qualif.model.person.server.Server;
-import net.slc.ef.fla.qualif.model.person.server.ServerFactory;
+import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
+import net.slc.ef.fla.qualif.model.person.waiter.WaiterFactory;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.chair.ChairStatus;
 import net.slc.ef.fla.qualif.model.restaurant.state.*;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class RestaurantFacade {
 
     private final Restaurant restaurant;
-    private final PersonFactory customerFactory, serverFactory, cookFactory;
+    private final PersonFactory customerFactory, waiterFactory, cookFactory;
     private final Map<Class<? extends RestaurantState>, RestaurantState> stateMap;
 
     public RestaurantFacade(Restaurant restaurant) {
@@ -32,8 +33,8 @@ public class RestaurantFacade {
 
         PersonInitialGenerator initialsGenerator = new PersonInitialGenerator(this.restaurant);
         this.customerFactory = new CustomerFactory(this.restaurant, initialsGenerator);
-        this.serverFactory = new ServerFactory(this.restaurant, initialsGenerator);
-        this.cookFactory = new ServerFactory(this.restaurant, initialsGenerator);
+        this.waiterFactory = new WaiterFactory(this.restaurant, initialsGenerator);
+        this.cookFactory = new CookFactory(this.restaurant, initialsGenerator);
 
         this.stateMap = new HashMap<>();
         this.stateMap.put(RestaurantInitializationState.class, new RestaurantInitializationState(this.restaurant));
@@ -46,11 +47,11 @@ public class RestaurantFacade {
     }
 
     public void addExecutor(ExecutorService executor) {
-        restaurant.getExecutorServices().add(executor);
+        // idk
     }
 
     public void removeExecutor(ExecutorService executor) {
-        restaurant.getExecutorServices().remove(executor);
+        // idk
     }
 
     public void start() {
@@ -75,6 +76,20 @@ public class RestaurantFacade {
                         .build()
         );
 
+        restaurant.setMoney(1300);
+        restaurant.setScore(0);
+        restaurant.getChairs().addAll(List.of(
+                new Chair(1),
+                new Chair(2),
+                new Chair(3),
+                new Chair(4)
+        ));
+
+        this.restaurant.getWaiters().add((Waiter) waiterFactory.create());
+        this.restaurant.getWaiters().add((Waiter) waiterFactory.create());
+
+        this.restaurant.getCooks().add((Cook) cookFactory.create());
+        this.restaurant.getCooks().add((Cook) cookFactory.create());
     }
 
     public void end() {
@@ -85,7 +100,7 @@ public class RestaurantFacade {
     public List<AbstractPerson> getPersons() {
         List<AbstractPerson> persons = new ArrayList<>();
         persons.addAll(this.getCustomers());
-        persons.addAll(this.restaurant.getServers());
+        persons.addAll(this.restaurant.getWaiters());
         persons.addAll(this.restaurant.getCooks());
 
         return persons;
@@ -96,6 +111,7 @@ public class RestaurantFacade {
         return this.restaurant.getChairs().stream()
                 .filter(chair -> chair.getStatus() == ChairStatus.OCCUPIED)
                 .map(Chair::getCustomer)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -185,8 +201,8 @@ public class RestaurantFacade {
         this.restaurant.getChairs().add(new Chair(chairNumber));
     }
 
-    public int calculateServerPrice() {
-        int size = this.restaurant.getServers().size();
+    public int calculateWaiterPrice() {
+        int size = this.restaurant.getWaiters().size();
         if (size >= 7) {
             return -1;
         }
@@ -194,12 +210,12 @@ public class RestaurantFacade {
         return size * 150;
     }
 
-    public void hireServer() {
+    public void hireWaiter() {
         // deduct money
-        int newServerPrice = this.calculateServerPrice();
-        this.removeMoney(newServerPrice);
+        int newWaiterPrice = this.calculateWaiterPrice();
+        this.removeMoney(newWaiterPrice);
 
-        this.restaurant.getServers().add((Server) serverFactory.create());
+        this.restaurant.getWaiters().add((Waiter) waiterFactory.create());
     }
 
     public int calculateCookPrice() {

@@ -18,8 +18,8 @@ public class RestaurantHiringState extends RestaurantState {
         System.out.printf("     Size: %d Seats\n", restaurant.getChairs().size());
         System.out.println();
 
-        int newServerPrice = restaurant.getRestaurantFacade().calculateServerPrice();
-        System.out.printf("1. Hire Waiter (Rp. %s)\n", newServerPrice > 0 ? newServerPrice : "Max");
+        int newWaiterPrice = restaurant.getRestaurantFacade().calculateWaiterPrice();
+        System.out.printf("1. Hire Waiter (Rp. %s)\n", newWaiterPrice > 0 ? newWaiterPrice : "Max");
 
         int newCookPrice = restaurant.getRestaurantFacade().calculateCookPrice();
         System.out.printf("2. Hire Cook (Rp. %s)\n", newCookPrice > 0 ? newCookPrice : "Max");
@@ -32,19 +32,19 @@ public class RestaurantHiringState extends RestaurantState {
     public void processInput(String string) {
         switch (string) {
             case "1":
-                int newServerPrice = restaurant.getRestaurantFacade().calculateServerPrice();
-                if (newServerPrice < 0) {
+                int newWaiterPrice = restaurant.getRestaurantFacade().calculateWaiterPrice();
+                if (newWaiterPrice < 0) {
                     System.out.println("You have reached the maximum number of waiters");
                     break;
                 }
 
-                if (!restaurant.getRestaurantFacade().canPurchase(newServerPrice)) {
+                if (!restaurant.getRestaurantFacade().canPurchase(newWaiterPrice)) {
                     System.out.println("You don't have enough money");
                     break;
                 }
 
                 System.out.println("Hiring Waiter");
-                restaurant.getRestaurantFacade().hireServer();
+                restaurant.getRestaurantFacade().hireWaiter();
                 break;
             case "2":
                 int newCookPrice = restaurant.getRestaurantFacade().calculateCookPrice();

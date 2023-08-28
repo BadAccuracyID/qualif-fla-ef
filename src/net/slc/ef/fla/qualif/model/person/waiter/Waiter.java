@@ -1,17 +1,17 @@
-package net.slc.ef.fla.qualif.model.person.server;
+package net.slc.ef.fla.qualif.model.person.waiter;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
 
-public class Server extends AbstractPerson {
+public class Waiter extends AbstractPerson {
 
-    private final ServerFacade serverFacade;
+    private final WaiterFacade waiterFacade;
     private TickableState state;
 
-    public Server(Restaurant restaurant, String initial) {
+    public Waiter(Restaurant restaurant, String initial) {
         super(restaurant, initial);
-        this.serverFacade = new ServerFacade(this);
+        this.waiterFacade = new WaiterFacade(this);
     }
 
     @Override
@@ -27,8 +27,8 @@ public class Server extends AbstractPerson {
         this.state = state;
     }
 
-    public ServerFacade getServerFacade() {
-        return serverFacade;
+    public WaiterFacade getWaiterFacade() {
+        return waiterFacade;
     }
 
 }

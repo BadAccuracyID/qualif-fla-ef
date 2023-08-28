@@ -2,7 +2,7 @@ package net.slc.ef.fla.qualif.model.restaurant;
 
 import net.slc.ef.fla.qualif.async.ASExecutorManager;
 import net.slc.ef.fla.qualif.model.person.cook.Cook;
-import net.slc.ef.fla.qualif.model.person.server.Server;
+import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantInitializationState;
 import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantState;
@@ -10,7 +10,6 @@ import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantState;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 public class Restaurant {
 
@@ -20,7 +19,7 @@ public class Restaurant {
 
     private final String name;
     private final List<Chair> chairs;
-    private final List<Server> servers;
+    private final List<Waiter> waiters;
     private final List<Cook> cooks;
 
     private final RestaurantFacade restaurantFacade;
@@ -33,7 +32,7 @@ public class Restaurant {
     private Restaurant(String name) {
         this.name = name;
         this.chairs = new ArrayList<>();
-        this.servers = new ArrayList<>();
+        this.waiters = new ArrayList<>();
         this.cooks = new ArrayList<>();
         this.restaurantFacade = new RestaurantFacade(this);
         this.asExecutorManager = new ASExecutorManager();
@@ -72,8 +71,8 @@ public class Restaurant {
         return chairs;
     }
 
-    public List<Server> getServers() {
-        return servers;
+    public List<Waiter> getWaiters() {
+        return waiters;
     }
 
     public List<Cook> getCooks() {

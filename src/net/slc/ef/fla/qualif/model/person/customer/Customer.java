@@ -9,6 +9,7 @@ public class Customer extends AbstractPerson {
     private final CustomerFacade customerFacade;
     private int tolerance;
     private TickableState state;
+
     public Customer(Restaurant restaurant, String name) {
         super(restaurant, name);
         this.customerFacade = new CustomerFacade(this);
