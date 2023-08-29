@@ -1,10 +1,11 @@
 package net.slc.ef.fla.qualif.model.person.chef.state;
 
 import net.slc.ef.fla.qualif.model.person.chef.Chef;
+import net.slc.ef.fla.qualif.model.person.state.ServableState;
 import net.slc.ef.fla.qualif.state.MasterState;
 import net.slc.ef.fla.qualif.state.TickableState;
 
-public abstract class ChefState extends TickableState {
+public abstract class ChefState extends ServableState {
 
     protected final Chef chef;
 
@@ -13,7 +14,7 @@ public abstract class ChefState extends TickableState {
     }
 
     @Override
-    protected void switchState(TickableState state) {
+    protected void switchState(ServableState state) {
         this.chef.getChefFacade().switchState(state);
     }
 

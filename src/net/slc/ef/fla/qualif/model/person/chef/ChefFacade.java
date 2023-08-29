@@ -1,6 +1,6 @@
 package net.slc.ef.fla.qualif.model.person.chef;
 
-import net.slc.ef.fla.qualif.state.TickableState;
+import net.slc.ef.fla.qualif.model.person.state.ServableState;
 
 public class ChefFacade {
 
@@ -10,7 +10,7 @@ public class ChefFacade {
         this.chef = chef;
     }
 
-    public void switchState(TickableState state) {
+    public void switchState(ServableState state) {
         this.chef.getState().onExit();
 
         this.chef.setState(state);

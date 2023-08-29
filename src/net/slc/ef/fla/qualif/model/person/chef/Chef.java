@@ -2,13 +2,13 @@ package net.slc.ef.fla.qualif.model.person.chef;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.chef.state.ChefIdleState;
+import net.slc.ef.fla.qualif.model.person.state.ServableState;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
-import net.slc.ef.fla.qualif.state.TickableState;
 
 public class Chef extends AbstractPerson {
 
     private final ChefFacade chefFacade;
-    private TickableState state;
+    private ServableState state;
 
     private int speed;
     private int skillLevel;
@@ -33,11 +33,11 @@ public class Chef extends AbstractPerson {
         return chefFacade;
     }
 
-    public TickableState getState() {
+    public ServableState getState() {
         return state;
     }
 
-    public void setState(TickableState state) {
+    public void setState(ServableState state) {
         this.state = state;
     }
 

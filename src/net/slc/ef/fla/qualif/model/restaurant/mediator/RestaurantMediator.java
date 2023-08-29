@@ -3,6 +3,7 @@ package net.slc.ef.fla.qualif.model.restaurant.mediator;
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.chef.Chef;
 import net.slc.ef.fla.qualif.model.person.chef.state.ChefCookState;
+import net.slc.ef.fla.qualif.model.person.chef.state.ChefDoneState;
 import net.slc.ef.fla.qualif.model.person.chef.state.ChefIdleState;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.state.*;
@@ -88,6 +89,14 @@ public class RestaurantMediator {
                     chefCustomer.getCustomerFacade().switchState(new CustomerWaitCState(chefCustomer));
                     waiterCustomer.getCustomerFacade().switchState(new CustomerWaitBState(waiterCustomer));
                 }
+                break;
+            }
+
+            case CHEF_COOK_DONE: {
+                assert sender instanceof Chef;
+                Chef chef = (Chef) sender;
+
+                chef.getChefFacade().switchState(new ChefDoneState(chef));
                 break;
             }
 

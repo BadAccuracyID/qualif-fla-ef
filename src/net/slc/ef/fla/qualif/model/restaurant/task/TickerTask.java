@@ -50,10 +50,10 @@ public class TickerTask implements Runnable {
 
             Waiter waiter;
             if ((waiter = this.getWaiter(restaurant.getWaiters(), i)) != null) {
-                AbstractPerson server = waiter.getState().getServer();
-                String serverInitial = server != null ? server.getInitial() : "";
+                AbstractPerson served = waiter.getState().getServer();
+                String servedInitial = served != null ? served.getInitial() : "";
 
-                System.out.printf("<%-2s>, %15s<%-2s>", waiter.getInitial(), waiter.getState().getName(), serverInitial);
+                System.out.printf("<%-2s>, %15s<%-2s>", waiter.getInitial(), waiter.getState().getName(), servedInitial);
             } else {
                 System.out.print("                         ");
             }
@@ -61,7 +61,10 @@ public class TickerTask implements Runnable {
 
             Chef chef;
             if ((chef = this.getChef(restaurant.getChefs(), i)) != null) {
-                System.out.printf("<%-2s>, %13s<%-2s>", chef.getInitial(), chef.getState().getName(), chef.getInitial());
+                AbstractPerson served = chef.getState().getServer();
+                String servedInitial = served != null ? served.getInitial() : "";
+
+                System.out.printf("<%-2s>, %13s<%-2s>", chef.getInitial(), chef.getState().getName(), servedInitial);
             } else {
                 System.out.print("                       ");
             }

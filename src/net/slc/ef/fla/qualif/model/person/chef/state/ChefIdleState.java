@@ -1,5 +1,6 @@
 package net.slc.ef.fla.qualif.model.person.chef.state;
 
+import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.chef.Chef;
 
 public class ChefIdleState extends ChefState {
@@ -20,11 +21,16 @@ public class ChefIdleState extends ChefState {
 
     @Override
     public void onTick() {
-        // do nothing
+
     }
 
     @Override
     public void onExit() {
 
+    }
+
+    @Override
+    public AbstractPerson getServer() {
+        return null;
     }
 }
