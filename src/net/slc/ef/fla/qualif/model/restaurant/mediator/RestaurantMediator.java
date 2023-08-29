@@ -135,7 +135,7 @@ public class RestaurantMediator {
                 break;
             }
 
-            case CUSTOMER_LEAVE: {
+            case CUSTOMER_LEAVE_POSITIVE: {
                 assert sender instanceof Customer;
                 Customer customer = (Customer) sender;
 
@@ -143,6 +143,17 @@ public class RestaurantMediator {
 
                 restaurantFacade.removeCustomer(customer);
                 restaurantFacade.addScore(30 * chef.getSkillLevel());
+
+                personRelationStorage.remove(customer);
+                break;
+            }
+
+            case CUSTOMER_LEAVE_NEGATIVE: {
+                assert sender instanceof Customer;
+                Customer customer = (Customer) sender;
+
+                restaurantFacade.removeCustomer(customer);
+                restaurantFacade.removeScore(300);
 
                 personRelationStorage.remove(customer);
                 break;

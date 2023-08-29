@@ -26,7 +26,7 @@ public class CustomerEatState extends CustomerState {
     public void onTick() {
         delay--;
         if (delay <= 0) {
-            customer.getRestaurant().getRestaurantMediator().notify(customer, MediatorAction.CUSTOMER_LEAVE);
+            customer.getRestaurant().getRestaurantMediator().notify(customer, MediatorAction.CUSTOMER_LEAVE_POSITIVE);
         }
     }
 
