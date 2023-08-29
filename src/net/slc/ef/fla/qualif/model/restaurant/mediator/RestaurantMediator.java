@@ -6,7 +6,7 @@ import net.slc.ef.fla.qualif.model.person.chef.state.ChefCookState;
 import net.slc.ef.fla.qualif.model.person.chef.state.ChefIdleState;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.state.CustomerEatState;
-import net.slc.ef.fla.qualif.model.person.customer.state.CustomerOrderState;
+import net.slc.ef.fla.qualif.model.person.customer.state.CustomerOrderBState;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterIdleState;
 import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterServeState;
@@ -40,7 +40,7 @@ public class RestaurantMediator {
 
                 personRelationStorage.assignWaiter(customer, availableWaiter);
 
-                customer.getCustomerFacade().switchState(new CustomerOrderState(customer));
+                customer.getCustomerFacade().switchState(new CustomerOrderBState(customer));
                 availableWaiter.getWaiterFacade().switchState(new WaiterTakeOrderState(availableWaiter));
                 break;
             }

@@ -3,10 +3,12 @@ package net.slc.ef.fla.qualif.model.person.customer.state;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.restaurant.mediator.MediatorAction;
 
-public class CustomerArriveState extends CustomerState {
+// waiting for available waiter
+public class CustomerOrderAState extends CustomerState {
 
+    private int counter = 0;
 
-    public CustomerArriveState(Customer customer) {
+    public CustomerOrderAState(Customer customer) {
         super(customer);
     }
 
@@ -23,6 +25,9 @@ public class CustomerArriveState extends CustomerState {
     @Override
     public void onTick() {
         customer.getRestaurant().getRestaurantMediator().notify(customer, MediatorAction.REQUEST_WAITER);
+        if (counter++ % 2 == 0) {
+            customer.getCustomerFacade().decreaseTolerance();
+        }
     }
 
     @Override

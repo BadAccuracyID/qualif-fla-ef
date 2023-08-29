@@ -2,11 +2,10 @@ package net.slc.ef.fla.qualif.model.person.customer.state;
 
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 
-public class CustomerOrderState extends CustomerState {
+// order and waiter is serving
+public class CustomerOrderBState extends CustomerState {
 
-    private int counter = 0;
-
-    public CustomerOrderState(Customer customer) {
+    public CustomerOrderBState(Customer customer) {
         super(customer);
     }
 
@@ -22,9 +21,7 @@ public class CustomerOrderState extends CustomerState {
 
     @Override
     public void onTick() {
-        if (counter++ % 2 == 0) {
-            customer.getCustomerFacade().decreaseTolerance();
-        }
+
     }
 
     @Override

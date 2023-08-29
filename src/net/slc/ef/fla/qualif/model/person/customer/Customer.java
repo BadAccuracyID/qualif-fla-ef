@@ -1,7 +1,7 @@
 package net.slc.ef.fla.qualif.model.person.customer;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
-import net.slc.ef.fla.qualif.model.person.customer.state.CustomerArriveState;
+import net.slc.ef.fla.qualif.model.person.customer.state.CustomerOrderAState;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
 
@@ -16,7 +16,7 @@ public class Customer extends AbstractPerson {
         super(restaurant, name);
         this.customerFacade = new CustomerFacade(this);
 
-        this.state = new CustomerArriveState(this);
+        this.state = new CustomerOrderAState(this);
         this.state.onEnter();
 
         this.tolerance = 12;
