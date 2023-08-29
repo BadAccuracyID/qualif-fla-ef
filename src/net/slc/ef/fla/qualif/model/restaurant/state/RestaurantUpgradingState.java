@@ -59,7 +59,7 @@ public class RestaurantUpgradingState extends RestaurantState {
                 break;
             case "4":
                 System.out.println("Upgrading Cook");
-                restaurant.getRestaurantFacade().switchState(RestaurantUpgradeChefState.class);
+                restaurant.getRestaurantFacade().switchState(RestaurantUpgradeChefAState.class);
                 break;
             case "5":
                 System.out.println("Back to pause menu");

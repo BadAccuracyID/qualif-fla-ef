@@ -31,9 +31,12 @@ public class Restaurant implements IObservable<Restaurant> {
     private final RestaurantMediator restaurantMediator;
 
     private final ASExecutorManager asExecutorManager;
+
     private RestaurantState state;
     private int money;
     private int score;
+
+    private Chef upgradingChef;
 
     private Restaurant(String name) {
         this.name = name;
@@ -133,5 +136,13 @@ public class Restaurant implements IObservable<Restaurant> {
     @Override
     public void notifyObservers() {
         this.observers.forEach(observer -> observer.update(this));
+    }
+
+    public Chef getUpgradingChef() {
+        return upgradingChef;
+    }
+
+    public void setUpgradingChef(Chef upgradingChef) {
+        this.upgradingChef = upgradingChef;
     }
 }

@@ -39,8 +39,8 @@ public class RestaurantMediator {
                 if ((availableWaiter = restaurantFacade.getIdlingWaiter()) != null) {
                     personRelationStorage.assignWaiter(customer, availableWaiter);
 
-                    customer.getCustomerFacade().switchState(new CustomerOrderBState(customer));
                     availableWaiter.getWaiterFacade().switchState(new WaiterTakeOrderState(availableWaiter));
+                    customer.getCustomerFacade().switchState(new CustomerOrderBState(customer));
                 }
                 break;
             }
@@ -189,6 +189,7 @@ public class RestaurantMediator {
                 PersonRelationKey other = (PersonRelationKey) obj;
                 return this.person == other.person && this.relation == other.relation;
             }
+
             return false;
         }
 

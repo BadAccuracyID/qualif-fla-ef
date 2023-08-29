@@ -13,7 +13,6 @@ import net.slc.ef.fla.qualif.model.person.customer.CustomerFactory;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.person.waiter.WaiterFactory;
 import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterIdleState;
-import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterTakeOrderState;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.chair.ChairStatus;
 import net.slc.ef.fla.qualif.model.restaurant.spawner.CustomerSpawner;
@@ -47,7 +46,7 @@ public class RestaurantFacade {
         this.stateMap.put(RestaurantPausedState.class, new RestaurantPausedState(this.restaurant));
         this.stateMap.put(RestaurantHiringState.class, new RestaurantHiringState(this.restaurant));
         this.stateMap.put(RestaurantUpgradingState.class, new RestaurantUpgradingState(this.restaurant));
-        this.stateMap.put(RestaurantUpgradeChefState.class, new RestaurantUpgradeChefState(this.restaurant));
+        this.stateMap.put(RestaurantUpgradeChefAState.class, new RestaurantUpgradeChefAState(this.restaurant));
         this.stateMap.put(RestaurantUpgradeWaiterState.class, new RestaurantUpgradeWaiterState(this.restaurant));
     }
 
@@ -261,19 +260,6 @@ public class RestaurantFacade {
         return waiters.get(rand.nextInt(waiters.size()));
     }
 
-    public Waiter getWaitingWaiter() {
-        List<Waiter> waiters = this.restaurant.getWaiters().stream()
-                .filter(waiter -> waiter.getState().isState(WaiterTakeOrderState.class))
-                .collect(Collectors.toList());
-
-        if (waiters.isEmpty()) {
-            return null;
-        }
-
-        Random rand = new Random();
-        return waiters.get(rand.nextInt(waiters.size()));
-    }
-
     public Chef getIdlingChef() {
         List<Chef> chefs = this.restaurant.getChefs().stream()
                 .filter(chef -> chef.getState().isState(ChefIdleState.class))
@@ -298,5 +284,37 @@ public class RestaurantFacade {
 
         Random rand = new Random();
         return chefs.get(rand.nextInt(chefs.size()));
+    }
+
+    public void selectUpgradingChef(Chef chef) {
+        this.restaurant.setUpgradingChef(chef);
+    }
+
+    public Chef getUpgradingChef() {
+        return this.restaurant.getUpgradingChef();
+    }
+
+    public void upgradeChefSpeed(Chef chef) {
+        // deduct money
+        int upgradePrice = 150;
+        this.removeMoney(upgradePrice);
+
+        chef.setSpeed(chef.getSpeed() + 1);
+    }
+
+    public void upgradeChefSkill(Chef chef) {
+        // deduct money
+        int upgradePrice = 150;
+        this.removeMoney(upgradePrice);
+
+        chef.setSkillLevel(chef.getSkillLevel() + 1);
+    }
+
+    public void upgradeWaiterSpeed(Waiter waiter) {
+        // deduct money
+        int upgradePrice = 150;
+        this.removeMoney(upgradePrice);
+
+        waiter.setSpeed(waiter.getSpeed() + 1);
     }
 }

@@ -16,7 +16,6 @@ public class RestaurantRunningState extends RestaurantState {
     @Override
     public void processInput(String string) {
         // pause switch state to paused
-        System.out.println("Restaurant paused");
         restaurant.getRestaurantFacade().switchState(RestaurantPausedState.class);
     }
 

@@ -1,6 +1,7 @@
 package net.slc.ef.fla.qualif.model.restaurant.state;
 
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
+import net.slc.ef.fla.qualif.utils.Utils;
 
 public class RestaurantInitializationState extends RestaurantState {
 
@@ -10,6 +11,7 @@ public class RestaurantInitializationState extends RestaurantState {
 
     @Override
     public void onEnter() {
+        Utils.clearScreen();
         System.out.println("This is some beautiful splash screen!");
         try {
             Thread.sleep(2500);
