@@ -16,6 +16,7 @@ import net.slc.ef.fla.qualif.model.restaurant.RestaurantFacade;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RestaurantMediator {
 
