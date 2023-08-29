@@ -248,42 +248,24 @@ public class RestaurantFacade {
     }
 
     public Waiter getIdlingWaiter() {
-        List<Waiter> waiters = this.restaurant.getWaiters().stream()
+        return this.restaurant.getWaiters().stream()
                 .filter(waiter -> waiter.getState().isState(WaiterIdleState.class))
-                .collect(Collectors.toList());
-
-        if (waiters.isEmpty()) {
-            return null;
-        }
-
-        Random rand = new Random();
-        return waiters.get(rand.nextInt(waiters.size()));
+                .findFirst()
+                .orElse(null);
     }
 
     public Chef getIdlingChef() {
-        List<Chef> chefs = this.restaurant.getChefs().stream()
+        return this.restaurant.getChefs().stream()
                 .filter(chef -> chef.getState().isState(ChefIdleState.class))
-                .collect(Collectors.toList());
-
-        if (chefs.isEmpty()) {
-            return null;
-        }
-
-        Random rand = new Random();
-        return chefs.get(rand.nextInt(chefs.size()));
+                .findFirst()
+                .orElse(null);
     }
 
     public Chef getDoneChef() {
-        List<Chef> chefs = this.restaurant.getChefs().stream()
+        return this.restaurant.getChefs().stream()
                 .filter(chef -> chef.getState().isState(ChefDoneState.class))
-                .collect(Collectors.toList());
-
-        if (chefs.isEmpty()) {
-            return null;
-        }
-
-        Random rand = new Random();
-        return chefs.get(rand.nextInt(chefs.size()));
+                .findFirst()
+                .orElse(null);
     }
 
     public void selectUpgradingChef(Chef chef) {
