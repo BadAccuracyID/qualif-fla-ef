@@ -1,7 +1,7 @@
 package net.slc.ef.fla.qualif.observer;
 
-public interface IObserver {
+public interface IObserver<T> {
 
-    void update();
+    void update(T t);
 
 }

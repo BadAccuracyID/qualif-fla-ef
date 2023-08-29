@@ -6,5 +6,6 @@ public enum MediatorAction {
     REQUEST_COOK,
     DELIVER_TO_WAITER,
     DELIVER_TO_CUSTOMER,
+    CUSTOMER_LEAVE,
 
 }

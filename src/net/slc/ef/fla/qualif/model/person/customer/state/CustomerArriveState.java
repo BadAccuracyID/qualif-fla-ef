@@ -3,11 +3,10 @@ package net.slc.ef.fla.qualif.model.person.customer.state;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.restaurant.mediator.MediatorAction;
 
-public class CustomerEatState extends CustomerState {
+public class CustomerArriveState extends CustomerState {
 
-    private int delay = 6;
 
-    public CustomerEatState(Customer customer) {
+    public CustomerArriveState(Customer customer) {
         super(customer);
     }
 
@@ -18,10 +17,7 @@ public class CustomerEatState extends CustomerState {
 
     @Override
     public void onTick() {
-        delay--;
-        if (delay <= 0) {
-            customer.getRestaurant().getRestaurantMediator().notify(customer, MediatorAction.CUSTOMER_LEAVE);
-        }
+        customer.getRestaurant().getRestaurantMediator().notify(customer, MediatorAction.REQUEST_WAITER);
     }
 
     @Override

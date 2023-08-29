@@ -63,11 +63,12 @@ public class TickerTask implements Runnable {
         System.out.println("                         Press enter to pause the game ");
 
         // tick all persons
-        if (restaurant.getRestaurantFacade().getPersons().isEmpty()) {
-            return;
-        }
-
         restaurant.getRestaurantFacade().getPersons().forEach(AbstractPerson::tick);
+
+        // check for spawn
+        if (restaurant.getRestaurantFacade().getRemainingCapacity() > 0) {
+            restaurant.notifyObservers();
+        }
     }
 
     private int getLinesNeeded() {

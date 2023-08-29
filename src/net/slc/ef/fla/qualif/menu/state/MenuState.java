@@ -16,4 +16,8 @@ public abstract class MenuState extends MasterState {
         this.menu.getMenuFacade().switchMenuState(state);
     }
 
+    @Override
+    public boolean isState(Class<? extends MasterState> clazz) {
+        return this.menu.getCurrentState().getClass().equals(clazz);
+    }
 }

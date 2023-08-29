@@ -25,7 +25,6 @@ public class WaiterTakeOrderState extends WaiterState {
 
     @Override
     public void onExit() {
-        waiter.setServingCustomer(null);
     }
 
 }

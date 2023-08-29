@@ -1,9 +1,7 @@
 package net.slc.ef.fla.qualif.model.person.customer;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
-import net.slc.ef.fla.qualif.model.person.chef.Chef;
-import net.slc.ef.fla.qualif.model.person.customer.state.CustomerOrderState;
-import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
+import net.slc.ef.fla.qualif.model.person.customer.state.CustomerArriveState;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
 
@@ -11,16 +9,14 @@ public class Customer extends AbstractPerson {
 
     private final CustomerFacade customerFacade;
     private TickableState state;
-    private int tolerance;
 
-    private Waiter waiter;
-    private Chef chef;
+    private int tolerance;
 
     public Customer(Restaurant restaurant, String name) {
         super(restaurant, name);
         this.customerFacade = new CustomerFacade(this);
 
-        this.state = new CustomerOrderState(this);
+        this.state = new CustomerArriveState(this);
         this.state.onEnter();
     }
 
@@ -49,19 +45,4 @@ public class Customer extends AbstractPerson {
         this.state = state;
     }
 
-    public Waiter getWaiter() {
-        return waiter;
-    }
-
-    public void setWaiter(Waiter waiter) {
-        this.waiter = waiter;
-    }
-
-    public Chef getChef() {
-        return chef;
-    }
-
-    public void setChef(Chef chef) {
-        this.chef = chef;
-    }
 }

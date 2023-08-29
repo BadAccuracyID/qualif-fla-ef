@@ -7,12 +7,14 @@ import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.mediator.RestaurantMediator;
 import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantInitializationState;
 import net.slc.ef.fla.qualif.model.restaurant.state.RestaurantState;
+import net.slc.ef.fla.qualif.observer.IObservable;
+import net.slc.ef.fla.qualif.observer.IObserver;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Restaurant {
+public class Restaurant implements IObservable<Restaurant> {
 
     // we use WeakReference to avoid memory leaks
     // let's hope that the GC will not be too aggressive
@@ -22,6 +24,8 @@ public class Restaurant {
     private final List<Chair> chairs;
     private final List<Waiter> waiters;
     private final List<Chef> chefs;
+
+    private final List<IObserver<Restaurant>> observers;
 
     private final RestaurantFacade restaurantFacade;
     private final RestaurantMediator restaurantMediator;
@@ -36,6 +40,8 @@ public class Restaurant {
         this.chairs = new ArrayList<>();
         this.waiters = new ArrayList<>();
         this.chefs = new ArrayList<>();
+        this.observers = new ArrayList<>();
+
         this.restaurantFacade = new RestaurantFacade(this);
         this.restaurantMediator = new RestaurantMediator(this);
         this.asExecutorManager = new ASExecutorManager();
@@ -112,5 +118,20 @@ public class Restaurant {
 
     public RestaurantMediator getRestaurantMediator() {
         return restaurantMediator;
+    }
+
+    @Override
+    public void addObserver(IObserver<Restaurant> observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(IObserver<Restaurant> observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        this.observers.forEach(observer -> observer.update(this));
     }
 }

@@ -14,6 +14,7 @@ import net.slc.ef.fla.qualif.model.person.waiter.WaiterFactory;
 import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterIdleState;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.chair.ChairStatus;
+import net.slc.ef.fla.qualif.model.restaurant.spawner.CustomerSpawner;
 import net.slc.ef.fla.qualif.model.restaurant.state.*;
 import net.slc.ef.fla.qualif.model.restaurant.task.ScannerTask;
 import net.slc.ef.fla.qualif.model.restaurant.task.TickerTask;
@@ -92,6 +93,8 @@ public class RestaurantFacade {
 
         this.restaurant.getChefs().add((Chef) chefFactory.create());
         this.restaurant.getChefs().add((Chef) chefFactory.create());
+
+        this.restaurant.addObserver(new CustomerSpawner());
     }
 
     public void end() {
@@ -133,19 +136,19 @@ public class RestaurantFacade {
         return remainingCapacity;
     }
 
-    public boolean canAddCustomer() {
-        // check if restaurant is full
-        if (this.getCustomers().size() == restaurant.getChairs().size()) {
-            return false;
+    public void addCustomer() {
+        // get first empty chair
+        Chair chair = this.restaurant.getChairs().stream()
+                .filter(chair1 -> chair1.getStatus() == ChairStatus.AVAILABLE)
+                .findFirst()
+                .orElse(null);
+
+        if (chair == null) {
+            throw new IllegalStateException("No empty chair");
         }
 
-        // 25% chance to add a customer
-        Random rand = new Random();
-        return rand.nextInt(4) == 0;
-    }
-
-    public void addCustomer() {
-        this.getCustomers().add((Customer) customerFactory.create());
+        chair.setStatus(ChairStatus.OCCUPIED);
+        chair.setCustomer((Customer) customerFactory.create());
     }
 
     public void removeCustomer(Customer customer) {
