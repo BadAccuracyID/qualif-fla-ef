@@ -18,6 +18,8 @@ public class Customer extends AbstractPerson {
 
         this.state = new CustomerArriveState(this);
         this.state.onEnter();
+
+        this.tolerance = 12;
     }
 
     @Override

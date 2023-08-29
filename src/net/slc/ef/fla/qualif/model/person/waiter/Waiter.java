@@ -1,6 +1,7 @@
 package net.slc.ef.fla.qualif.model.person.waiter;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
+import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterIdleState;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
 
@@ -14,6 +15,10 @@ public class Waiter extends AbstractPerson {
     public Waiter(Restaurant restaurant, String initial) {
         super(restaurant, initial);
         this.waiterFacade = new WaiterFacade(this);
+
+        this.state = new WaiterIdleState(this);
+        this.state.onEnter();
+
         this.speed = 1;
     }
 

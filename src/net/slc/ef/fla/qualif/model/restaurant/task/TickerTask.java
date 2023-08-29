@@ -5,16 +5,20 @@ import net.slc.ef.fla.qualif.model.person.chef.Chef;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
+import net.slc.ef.fla.qualif.model.restaurant.RestaurantFacade;
 import net.slc.ef.fla.qualif.utils.Utils;
 
 import java.util.List;
+import java.util.Objects;
 
 public class TickerTask implements Runnable {
 
     private final Restaurant restaurant;
+    private final RestaurantFacade restaurantFacade;
 
     public TickerTask(Restaurant restaurant) {
         this.restaurant = restaurant;
+        this.restaurantFacade = restaurant.getRestaurantFacade();
     }
 
     @Override
@@ -34,8 +38,8 @@ public class TickerTask implements Runnable {
 
         for (int i = 0; i < this.getLinesNeeded(); i++) {
             Customer customer;
-            if ((customer = this.getCustomer(restaurant.getRestaurantFacade().getCustomers(), i)) != null) {
-                System.out.printf("%-2s <%-2d>,%-5s<%-2s>", customer.getInitial(), customer.getTolerance(), "wait food", customer.getInitial());
+            if ((customer = this.getCustomer(restaurantFacade.getCustomers(), i)) != null) {
+                System.out.printf("%-2s <%-2d>, %15s<%-2s>", customer.getInitial(), customer.getTolerance(), "wait food", customer.getInitial());
             } else {
                 System.out.print("                            ");
             }
@@ -63,17 +67,19 @@ public class TickerTask implements Runnable {
         System.out.println("                         Press enter to pause the game ");
 
         // tick all persons
-        restaurant.getRestaurantFacade().getPersons().forEach(AbstractPerson::tick);
+        restaurantFacade.getPersons().stream()
+                .filter(Objects::nonNull)
+                .forEach(AbstractPerson::tick);
 
         // check for spawn
-        if (restaurant.getRestaurantFacade().getRemainingCapacity() > 0) {
+        if (restaurantFacade.getRemainingCapacity() > 0) {
             restaurant.notifyObservers();
         }
     }
 
     private int getLinesNeeded() {
         // so, each customer is 1 line, and each waiter and cook is 1/2 line
-        int personSize = restaurant.getRestaurantFacade().getCustomers().size();
+        int personSize = restaurantFacade.getCustomers().size();
         int waiterSize = (int) Math.ceil(restaurant.getWaiters().size() / 2.0);
         int chefSize = (int) Math.ceil(restaurant.getChefs().size() / 2.0);
 
@@ -82,6 +88,9 @@ public class TickerTask implements Runnable {
 
     private Customer getCustomer(List<Customer> list, int index) {
         if (list.isEmpty()) {
+            return null;
+        }
+        if (index >= list.size()) {
             return null;
         }
 

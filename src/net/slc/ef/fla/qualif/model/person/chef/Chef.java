@@ -1,6 +1,7 @@
 package net.slc.ef.fla.qualif.model.person.chef;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
+import net.slc.ef.fla.qualif.model.person.chef.state.ChefIdleState;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
 
@@ -15,11 +16,17 @@ public class Chef extends AbstractPerson {
     public Chef(Restaurant restaurant, String name) {
         super(restaurant, name);
         this.chefFacade = new ChefFacade(this);
+
+        this.state = new ChefIdleState(this);
+        this.state.onEnter();
+
+        this.speed = 1;
+        this.skillLevel = 1;
     }
 
     @Override
     public void tick() {
-
+        this.state.onTick();
     }
 
     public ChefFacade getChefFacade() {
