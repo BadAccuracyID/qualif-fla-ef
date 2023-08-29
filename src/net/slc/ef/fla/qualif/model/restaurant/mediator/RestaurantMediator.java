@@ -27,6 +27,10 @@ public class RestaurantMediator {
         this.personRelationStorage = new PersonRelationStorage(new ArrayList<>());
     }
 
+    public PersonRelationStorage getRelationStorage() {
+        return personRelationStorage;
+    }
+
     public void notify(AbstractPerson sender, MediatorAction action) {
         switch (action) {
             case REQUEST_WAITER: { // customer wants to order
@@ -124,7 +128,7 @@ public class RestaurantMediator {
         }
     }
 
-    enum PersonRelationType {
+    public enum PersonRelationType {
         CUSTOMER_WAITER,
         CUSTOMER_CHEF,
         WAITER_CUSTOMER,
@@ -133,7 +137,7 @@ public class RestaurantMediator {
         CHEF_WAITER
     }
 
-    static class PersonRelationKey {
+    public static class PersonRelationKey {
         private final AbstractPerson person;
         private final PersonRelationType relation;
 
@@ -160,7 +164,7 @@ public class RestaurantMediator {
         }
     }
 
-    static class PersonRelation {
+    public static class PersonRelation {
         private final PersonRelationKey key;
         private final AbstractPerson person;
 
@@ -178,7 +182,7 @@ public class RestaurantMediator {
         }
     }
 
-    static class PersonRelationStorage {
+    public static class PersonRelationStorage {
         private final List<PersonRelation> relations;
 
         public PersonRelationStorage(List<PersonRelation> relations) {

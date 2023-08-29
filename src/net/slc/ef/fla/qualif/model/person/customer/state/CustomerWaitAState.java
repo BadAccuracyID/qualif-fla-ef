@@ -2,19 +2,19 @@ package net.slc.ef.fla.qualif.model.person.customer.state;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
-import net.slc.ef.fla.qualif.model.restaurant.mediator.MediatorAction;
 
-public class CustomerEatState extends CustomerState {
+// wait food
+public class CustomerWaitAState extends CustomerState {
 
-    private int delay = 6;
+    int counter = 0;
 
-    public CustomerEatState(Customer customer) {
+    public CustomerWaitAState(Customer customer) {
         super(customer);
     }
 
     @Override
     public String getName() {
-        return "eat";
+        return "wait food";
     }
 
     @Override
@@ -24,9 +24,8 @@ public class CustomerEatState extends CustomerState {
 
     @Override
     public void onTick() {
-        delay--;
-        if (delay <= 0) {
-            customer.getRestaurant().getRestaurantMediator().notify(customer, MediatorAction.CUSTOMER_LEAVE);
+        if (counter++ % 4 == 0) {
+            customer.getCustomerFacade().decreaseTolerance();
         }
     }
 

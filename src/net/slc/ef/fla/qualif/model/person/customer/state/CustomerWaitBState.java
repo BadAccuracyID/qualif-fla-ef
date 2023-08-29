@@ -4,16 +4,18 @@ import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.restaurant.mediator.RestaurantMediator;
 
-// order and waiter is serving
-public class CustomerOrderBState extends CustomerState {
+// wait food
+public class CustomerWaitBState extends CustomerState {
 
-    public CustomerOrderBState(Customer customer) {
+    int counter = 0;
+
+    public CustomerWaitBState(Customer customer) {
         super(customer);
     }
 
     @Override
     public String getName() {
-        return "order food";
+        return "wait food";
     }
 
     @Override
@@ -23,7 +25,9 @@ public class CustomerOrderBState extends CustomerState {
 
     @Override
     public void onTick() {
-
+        if (counter++ % 4 == 0) {
+            customer.getCustomerFacade().decreaseTolerance();
+        }
     }
 
     @Override
@@ -34,6 +38,6 @@ public class CustomerOrderBState extends CustomerState {
     @Override
     public AbstractPerson getServer() {
         RestaurantMediator.PersonRelationStorage relationStorage = customer.getRestaurant().getRestaurantMediator().getRelationStorage();
-        return relationStorage.getWaiter(customer);
+        return relationStorage.getChef(customer);
     }
 }
