@@ -16,7 +16,6 @@ import net.slc.ef.fla.qualif.model.restaurant.RestaurantFacade;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class RestaurantMediator {
 
@@ -47,20 +46,39 @@ public class RestaurantMediator {
             }
 
             case REQUEST_COOK: { // waiter forwards order to cook
-                Chef availableChef = restaurantFacade.getIdlingChef();
-                if (availableChef == null) {
-                    return;
-                }
+                Chef chef = restaurantFacade.getIdlingChef();
 
                 assert sender instanceof Waiter;
                 Waiter waiter = (Waiter) sender;
 
-                personRelationStorage.assignChef(waiter, availableChef);
-                Customer customer = personRelationStorage.getCustomer(waiter);
-                personRelationStorage.assignChef(customer, availableChef);
+                if (chef != null) { // chef is idling, send order to them
+                    personRelationStorage.assignChef(waiter, chef);
+                    Customer customer = personRelationStorage.getCustomer(waiter);
+                    personRelationStorage.assignChef(customer, chef);
 
-                waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter));
-                availableChef.getChefFacade().switchState(new ChefCookState(availableChef));
+                    waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter));
+                    chef.getChefFacade().switchState(new ChefCookState(chef));
+                } else { // chef is done cooking, send order to them and take the ready food
+                    chef = restaurantFacade.getDoneChef();
+                    if (chef != null) {
+                        // store variables
+                        Customer chefCustomer = personRelationStorage.getCustomer(chef);
+                        Customer waiterCustomer = personRelationStorage.getCustomer(waiter);
+
+                        // take the ready food
+                        personRelationStorage.assignChef(chefCustomer, chef);
+                        personRelationStorage.assignWaiter(chefCustomer, waiter);
+
+                        // send order to chef
+                        personRelationStorage.assignChef(waiterCustomer, chef);
+                        personRelationStorage.assignWaiter(waiterCustomer, waiter);
+
+                        // switch states
+                        waiter.getWaiterFacade().switchState(new WaiterServeState(waiter));
+                        chef.getChefFacade().switchState(new ChefCookState(chef));
+                    }
+                }
+
                 break;
             }
 
