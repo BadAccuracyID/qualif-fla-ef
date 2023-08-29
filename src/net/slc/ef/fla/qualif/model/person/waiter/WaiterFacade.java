@@ -1,6 +1,6 @@
 package net.slc.ef.fla.qualif.model.person.waiter;
 
-import net.slc.ef.fla.qualif.state.TickableState;
+import net.slc.ef.fla.qualif.model.person.state.ServableState;
 
 public class WaiterFacade {
 
@@ -10,7 +10,7 @@ public class WaiterFacade {
         this.waiter = waiter;
     }
 
-    public void switchState(TickableState state) {
+    public void switchState(ServableState state) {
         this.waiter.getState().onExit();
 
         this.waiter.setState(state);

@@ -5,28 +5,29 @@ import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.mediator.MediatorAction;
 import net.slc.ef.fla.qualif.model.restaurant.mediator.RestaurantMediator;
 
-public class WaiterServeState extends WaiterState {
+public class WaiterBringOrderState extends WaiterState {
 
     private int delay = 1;
 
-    public WaiterServeState(Waiter waiter) {
+    public WaiterBringOrderState(Waiter waiter) {
         super(waiter);
     }
 
     @Override
     public String getName() {
-        return "serving food";
+        return "bring order";
     }
 
     @Override
     public void onEnter() {
+
     }
 
     @Override
     public void onTick() {
         delay--;
         if (delay <= 0) {
-            waiter.getRestaurant().getRestaurantMediator().notify(waiter, MediatorAction.DELIVER_TO_CUSTOMER);
+            waiter.getRestaurant().getRestaurantMediator().notify(waiter, MediatorAction.WAITER_BRING_ORDER);
         }
     }
 
@@ -38,6 +39,6 @@ public class WaiterServeState extends WaiterState {
     @Override
     public AbstractPerson getServer() {
         RestaurantMediator.PersonRelationStorage relationStorage = waiter.getRestaurant().getRestaurantMediator().getRelationStorage();
-        return relationStorage.getCustomer(waiter);
+        return relationStorage.getChef(waiter);
     }
 }

@@ -7,10 +7,7 @@ import net.slc.ef.fla.qualif.model.person.chef.state.ChefIdleState;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.state.*;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
-import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterIdleState;
-import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterServeState;
-import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterTakeOrderState;
-import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterWaitCookState;
+import net.slc.ef.fla.qualif.model.person.waiter.state.*;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.model.restaurant.RestaurantFacade;
 
@@ -86,7 +83,7 @@ public class RestaurantMediator {
                     personRelationStorage.assignWaiter(waiterCustomer, waiter);
 
                     // switch states
-                    waiter.getWaiterFacade().switchState(new WaiterServeState(waiter));
+                    waiter.getWaiterFacade().switchState(new WaiterBringOrderState(waiter));
                     chef.getChefFacade().switchState(new ChefCookState(chef));
                     chefCustomer.getCustomerFacade().switchState(new CustomerWaitCState(chefCustomer));
                     waiterCustomer.getCustomerFacade().switchState(new CustomerWaitBState(waiterCustomer));
@@ -105,18 +102,27 @@ public class RestaurantMediator {
                     personRelationStorage.assignWaiter(customer, waiter);
 
                     chef.getChefFacade().switchState(new ChefIdleState(chef));
-                    waiter.getWaiterFacade().switchState(new WaiterServeState(waiter));
+                    waiter.getWaiterFacade().switchState(new WaiterBringOrderState(waiter));
                     customer.getCustomerFacade().switchState(new CustomerWaitCState(customer));
                 }
                 break;
             }
 
-            case DELIVER_TO_CUSTOMER: { // delivering food from waiter to their customer
+            case WAITER_BRING_ORDER: { // bringing order from cook to waiter
+                assert sender instanceof Waiter;
+                Waiter waiter = (Waiter) sender;
+
+                waiter.getWaiterFacade().switchState(new WaiterServeState(waiter));
+                break;
+            }
+
+            case DELIVER_TO_CUSTOMER: { // serving food from waiter to their customer
                 assert sender instanceof Waiter;
                 Waiter waiter = (Waiter) sender;
 
                 Customer customer = personRelationStorage.getCustomer(waiter);
                 customer.getCustomerFacade().switchState(new CustomerEatState(customer));
+                waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter));
                 break;
             }
 

@@ -50,7 +50,10 @@ public class TickerTask implements Runnable {
 
             Waiter waiter;
             if ((waiter = this.getWaiter(restaurant.getWaiters(), i)) != null) {
-                System.out.printf("<%-2s>, %15s<%-2s>", waiter.getInitial(), waiter.getState().getName(), waiter.getInitial());
+                AbstractPerson server = waiter.getState().getServer();
+                String serverInitial = server != null ? server.getInitial() : "";
+
+                System.out.printf("<%-2s>, %15s<%-2s>", waiter.getInitial(), waiter.getState().getName(), serverInitial);
             } else {
                 System.out.print("                         ");
             }

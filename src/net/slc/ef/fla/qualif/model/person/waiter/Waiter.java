@@ -1,6 +1,7 @@
 package net.slc.ef.fla.qualif.model.person.waiter;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
+import net.slc.ef.fla.qualif.model.person.state.ServableState;
 import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterIdleState;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
@@ -8,7 +9,7 @@ import net.slc.ef.fla.qualif.state.TickableState;
 public class Waiter extends AbstractPerson {
 
     private final WaiterFacade waiterFacade;
-    private TickableState state;
+    private ServableState state;
 
     private int speed;
 
@@ -27,11 +28,11 @@ public class Waiter extends AbstractPerson {
         this.state.onTick();
     }
 
-    public TickableState getState() {
+    public ServableState getState() {
         return state;
     }
 
-    public void setState(TickableState state) {
+    public void setState(ServableState state) {
         this.state = state;
     }
 

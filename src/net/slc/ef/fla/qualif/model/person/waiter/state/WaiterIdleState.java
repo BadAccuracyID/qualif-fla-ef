@@ -1,5 +1,6 @@
 package net.slc.ef.fla.qualif.model.person.waiter.state;
 
+import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 
 public class WaiterIdleState extends WaiterState {
@@ -26,5 +27,10 @@ public class WaiterIdleState extends WaiterState {
     @Override
     public void onTick() {
 
+    }
+
+    @Override
+    public AbstractPerson getServer() {
+        return null;
     }
 }
