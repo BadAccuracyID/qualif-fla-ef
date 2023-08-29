@@ -12,7 +12,6 @@ import net.slc.ef.fla.qualif.model.person.customer.CustomerFactory;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.person.waiter.WaiterFactory;
 import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterIdleState;
-import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterWaitState;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
 import net.slc.ef.fla.qualif.model.restaurant.chair.ChairStatus;
 import net.slc.ef.fla.qualif.model.restaurant.state.*;
@@ -247,19 +246,6 @@ public class RestaurantFacade {
     public Waiter getIdlingWaiter() {
         List<Waiter> waiters = this.restaurant.getWaiters().stream()
                 .filter(waiter -> waiter.getState().isState(WaiterIdleState.class))
-                .collect(Collectors.toList());
-
-        if (waiters.isEmpty()) {
-            return null;
-        }
-
-        Random rand = new Random();
-        return waiters.get(rand.nextInt(waiters.size()));
-    }
-
-    public Waiter getWaitingWaiter() {
-        List<Waiter> waiters = this.restaurant.getWaiters().stream()
-                .filter(waiter -> waiter.getState().isState(WaiterWaitState.class))
                 .collect(Collectors.toList());
 
         if (waiters.isEmpty()) {

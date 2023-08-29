@@ -19,7 +19,7 @@ public class WaiterTakeOrderState extends WaiterState {
     public void onTick() {
         delay--;
         if (delay <= 0) {
-            waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter));
+            waiter.getWaiterFacade().switchState(new WaiterOrderState(waiter));
         }
     }
 

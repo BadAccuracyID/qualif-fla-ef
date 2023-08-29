@@ -6,11 +6,14 @@ import net.slc.ef.fla.qualif.model.person.chef.state.ChefCookState;
 import net.slc.ef.fla.qualif.model.person.chef.state.ChefIdleState;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.state.CustomerEatState;
+import net.slc.ef.fla.qualif.model.person.customer.state.CustomerWaitState;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterServeState;
 import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterTakeOrderState;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.model.restaurant.RestaurantFacade;
+
+import java.util.List;
 
 public class RestaurantMediator {
 
@@ -33,12 +36,14 @@ public class RestaurantMediator {
                 assert sender instanceof Customer;
                 Customer customer = (Customer) sender;
 
+                customer.setState(new CustomerWaitState(customer));
+
                 availableWaiter.setServingCustomer(customer);
                 availableWaiter.setState(new WaiterTakeOrderState(availableWaiter));
                 break;
             }
 
-            case REQUEST_COOK: { // waiter wants to order
+            case REQUEST_COOK: { // waiter forwards order to cook
                 Chef availableChef = restaurantFacade.getIdlingChef();
                 if (availableChef == null) {
                     return;
@@ -48,7 +53,7 @@ public class RestaurantMediator {
                 Waiter waiter = (Waiter) sender;
 
                 availableChef.setServingWaiter(waiter);
-                availableChef.setServingCustomer((waiter).getServingCustomer());
+                availableChef.setServingCustomer(waiter.getServingCustomer());
                 availableChef.setState(new ChefCookState(availableChef));
                 break;
             }

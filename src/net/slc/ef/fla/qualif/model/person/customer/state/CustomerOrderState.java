@@ -7,7 +7,7 @@ public class CustomerOrderState extends CustomerState {
 
     private int counter = 0;
 
-    protected CustomerOrderState(Customer customer) {
+    public CustomerOrderState(Customer customer) {
         super(customer);
     }
 

@@ -6,7 +6,7 @@ public class CustomerWaitState extends CustomerState {
 
     int counter = 0;
 
-    protected CustomerWaitState(Customer customer) {
+    public CustomerWaitState(Customer customer) {
         super(customer);
     }
 

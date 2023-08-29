@@ -2,6 +2,7 @@ package net.slc.ef.fla.qualif.model.person.customer;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.chef.Chef;
+import net.slc.ef.fla.qualif.model.person.customer.state.CustomerOrderState;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
@@ -18,6 +19,9 @@ public class Customer extends AbstractPerson {
     public Customer(Restaurant restaurant, String name) {
         super(restaurant, name);
         this.customerFacade = new CustomerFacade(this);
+
+        this.state = new CustomerOrderState(this);
+        this.state.onEnter();
     }
 
     @Override
