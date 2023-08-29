@@ -2,13 +2,14 @@ package net.slc.ef.fla.qualif.model.person.customer;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.customer.state.CustomerOrderAState;
+import net.slc.ef.fla.qualif.model.person.state.ServableState;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.state.TickableState;
 
 public class Customer extends AbstractPerson {
 
     private final CustomerFacade customerFacade;
-    private TickableState state;
+    private ServableState state;
 
     private int tolerance;
 
@@ -39,11 +40,11 @@ public class Customer extends AbstractPerson {
         this.tolerance = tolerance;
     }
 
-    public TickableState getState() {
+    public ServableState getState() {
         return state;
     }
 
-    public void setState(TickableState state) {
+    public void setState(ServableState state) {
         this.state = state;
     }
 

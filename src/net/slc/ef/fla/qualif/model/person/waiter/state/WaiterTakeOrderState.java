@@ -1,6 +1,7 @@
 package net.slc.ef.fla.qualif.model.person.waiter.state;
 
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
+import net.slc.ef.fla.qualif.model.restaurant.mediator.MediatorAction;
 
 public class WaiterTakeOrderState extends WaiterState {
 
@@ -24,7 +25,7 @@ public class WaiterTakeOrderState extends WaiterState {
     public void onTick() {
         delay--;
         if (delay <= 0) {
-            waiter.getWaiterFacade().switchState(new WaiterWaitCookState(waiter));
+            waiter.getRestaurant().getRestaurantMediator().notify(waiter, MediatorAction.CUSTOMER_ORDER_TAKEN);
         }
     }
 

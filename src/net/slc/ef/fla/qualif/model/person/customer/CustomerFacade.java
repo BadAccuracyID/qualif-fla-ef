@@ -1,6 +1,6 @@
 package net.slc.ef.fla.qualif.model.person.customer;
 
-import net.slc.ef.fla.qualif.state.TickableState;
+import net.slc.ef.fla.qualif.model.person.state.ServableState;
 
 public class CustomerFacade {
 
@@ -18,7 +18,7 @@ public class CustomerFacade {
         this.customer.setTolerance(this.customer.getTolerance() + 1);
     }
 
-    public void switchState(TickableState state) {
+    public void switchState(ServableState state) {
         this.customer.getState().onExit();
 
         this.customer.setState(state);
