@@ -12,8 +12,9 @@ import net.slc.ef.fla.qualif.model.person.waiter.state.*;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.model.restaurant.RestaurantFacade;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class RestaurantMediator {
 
@@ -22,7 +23,7 @@ public class RestaurantMediator {
 
     public RestaurantMediator(Restaurant restaurant) {
         this.restaurantFacade = restaurant.getRestaurantFacade();
-        this.personRelationStorage = new PersonRelationStorage(new ArrayList<>());
+        this.personRelationStorage = new PersonRelationStorage();
     }
 
     public PersonRelationStorage getRelationStorage() {
@@ -185,12 +186,15 @@ public class RestaurantMediator {
 
         @Override
         public boolean equals(Object obj) {
-            if (obj instanceof PersonRelationKey) {
-                PersonRelationKey other = (PersonRelationKey) obj;
-                return this.person == other.person && this.relation == other.relation;
-            }
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            PersonRelationKey other = (PersonRelationKey) obj;
+            return Objects.equals(person, other.person) && relation == other.relation;
+        }
 
-            return false;
+        @Override
+        public int hashCode() {
+            return Objects.hash(person, relation);
         }
 
         public AbstractPerson getPerson() {
@@ -201,6 +205,7 @@ public class RestaurantMediator {
             return relation;
         }
     }
+
 
     public static class PersonRelation {
         private final PersonRelationKey key;
@@ -221,18 +226,19 @@ public class RestaurantMediator {
     }
 
     public static class PersonRelationStorage {
-        private final List<PersonRelation> relations;
 
-        public PersonRelationStorage(List<PersonRelation> relations) {
-            this.relations = relations;
+        private final Map<PersonRelationKey, AbstractPerson> relations;
+
+        public PersonRelationStorage() {
+            this.relations = new HashMap<>();
         }
 
         public void add(PersonRelation relation) {
-            relations.add(relation);
+            relations.put(relation.getKey(), relation.getPerson());
         }
 
         public void remove(PersonRelation relation) {
-            relations.remove(relation);
+            relations.remove(relation.getKey());
         }
 
         public void assignWaiter(Customer customer, Waiter waiter) {
@@ -265,90 +271,43 @@ public class RestaurantMediator {
             add(relation);
         }
 
+
         public Waiter getWaiter(Customer customer) {
             PersonRelationKey key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_WAITER);
-            for (PersonRelation relation : relations) {
-                if (relation.getKey().equals(key)) {
-                    return (Waiter) relation.getPerson();
-                }
-            }
-            return null;
+            return (Waiter) relations.get(key);
         }
 
         public Chef getChef(Customer customer) {
             PersonRelationKey key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_CHEF);
-            for (PersonRelation relation : relations) {
-                if (relation.getKey().equals(key)) {
-                    return (Chef) relation.getPerson();
-                }
-            }
-            return null;
+            return (Chef) relations.get(key);
         }
 
         public Chef getChef(Waiter waiter) {
             PersonRelationKey key = new PersonRelationKey(waiter, PersonRelationType.WAITER_CHEF);
-            for (PersonRelation relation : relations) {
-                if (relation.getKey().equals(key)) {
-                    return (Chef) relation.getPerson();
-                }
-            }
-            return null;
+            return (Chef) relations.get(key);
         }
 
         public Waiter getWaiter(Chef chef) {
             PersonRelationKey key = new PersonRelationKey(chef, PersonRelationType.CHEF_WAITER);
-            for (PersonRelation relation : relations) {
-                if (relation.getKey().equals(key)) {
-                    return (Waiter) relation.getPerson();
-                }
-            }
-            return null;
+            return (Waiter) relations.get(key);
         }
 
         public Customer getCustomer(Waiter waiter) {
             PersonRelationKey key = new PersonRelationKey(waiter, PersonRelationType.WAITER_CUSTOMER);
-            for (PersonRelation relation : relations) {
-                if (relation.getKey().equals(key)) {
-                    return (Customer) relation.getPerson();
-                }
-            }
-            return null;
+            return (Customer) relations.get(key);
         }
 
         public Customer getCustomer(Chef chef) {
             PersonRelationKey key = new PersonRelationKey(chef, PersonRelationType.CHEF_CUSTOMER);
-            for (PersonRelation relation : relations) {
-                if (relation.getKey().equals(key)) {
-                    return (Customer) relation.getPerson();
-                }
-            }
-            return null;
+            return (Customer) relations.get(key);
         }
 
         public void remove(Customer customer) {
             PersonRelationKey key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_WAITER);
-            PersonRelation relation = null;
-            for (PersonRelation r : relations) {
-                if (r.getKey().equals(key)) {
-                    relation = r;
-                    break;
-                }
-            }
-            if (relation != null) {
-                remove(relation);
-            }
+            remove(new PersonRelation(key, null));
 
             key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_CHEF);
-            relation = null;
-            for (PersonRelation r : relations) {
-                if (r.getKey().equals(key)) {
-                    relation = r;
-                    break;
-                }
-            }
-            if (relation != null) {
-                remove(relation);
-            }
+            remove(new PersonRelation(key, null));
         }
 
     }
