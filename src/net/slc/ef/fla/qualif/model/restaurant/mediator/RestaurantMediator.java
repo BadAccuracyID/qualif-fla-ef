@@ -37,10 +37,12 @@ public class RestaurantMediator {
                 assert sender instanceof Customer;
                 Customer customer = (Customer) sender;
 
+                System.out.println("Assigning waiter " + availableWaiter.getInitial() + " to customer " + customer.getInitial());
+
                 personRelationStorage.assignWaiter(customer, availableWaiter);
 
-                customer.setState(new CustomerOrderState(customer));
-                availableWaiter.setState(new WaiterTakeOrderState(availableWaiter));
+                customer.getCustomerFacade().switchState(new CustomerOrderState(customer));
+                availableWaiter.getWaiterFacade().switchState(new WaiterTakeOrderState(availableWaiter));
                 break;
             }
 
@@ -57,7 +59,7 @@ public class RestaurantMediator {
                 Customer customer = personRelationStorage.getCustomer(waiter);
                 personRelationStorage.assignChef(customer, availableChef);
 
-                availableChef.setState(new ChefCookState(availableChef));
+                availableChef.getChefFacade().switchState(new ChefCookState(availableChef));
                 break;
             }
 
@@ -74,8 +76,8 @@ public class RestaurantMediator {
                 personRelationStorage.assignChef(customer, chef);
                 personRelationStorage.assignWaiter(customer, availableWaiter);
 
-                chef.setState(new ChefIdleState(chef));
-                availableWaiter.setState(new WaiterServeState(availableWaiter));
+                chef.getChefFacade().switchState(new ChefIdleState(chef));
+                availableWaiter.getWaiterFacade().switchState(new WaiterServeState(availableWaiter));
                 break;
             }
 
