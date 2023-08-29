@@ -12,6 +12,11 @@ public class WaiterServeState extends WaiterState {
     }
 
     @Override
+    public String getName() {
+        return "serving food";
+    }
+
+    @Override
     public void onEnter() {
     }
 

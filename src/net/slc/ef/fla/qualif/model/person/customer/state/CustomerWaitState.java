@@ -11,6 +11,11 @@ public class CustomerWaitState extends CustomerState {
     }
 
     @Override
+    public String getName() {
+        return "wait food";
+    }
+
+    @Override
     public void onEnter() {
 
     }

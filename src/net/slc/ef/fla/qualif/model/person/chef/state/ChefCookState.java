@@ -12,6 +12,11 @@ public class ChefCookState extends ChefState {
     }
 
     @Override
+    public String getName() {
+        return "cook";
+    }
+
+    @Override
     public void onEnter() {
         this.delay = 6 - chef.getSpeed();
     }

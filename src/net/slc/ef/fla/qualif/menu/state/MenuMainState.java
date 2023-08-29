@@ -10,6 +10,11 @@ public class MenuMainState extends MenuState {
     }
 
     @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
     public void onEnter() {
         Utils.clearScreen();
         System.out.println("Welcome to Restaurant Tycoon!");

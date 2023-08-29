@@ -2,6 +2,8 @@ package net.slc.ef.fla.qualif.state;
 
 public abstract class MasterState {
 
+    public abstract String getName();
+
     public abstract void onEnter();
 
     public abstract void onExit();

@@ -12,6 +12,11 @@ public class CustomerEatState extends CustomerState {
     }
 
     @Override
+    public String getName() {
+        return "eat";
+    }
+
+    @Override
     public void onEnter() {
 
     }

@@ -11,6 +11,11 @@ public class WaiterTakeOrderState extends WaiterState {
     }
 
     @Override
+    public String getName() {
+        return "take order";
+    }
+
+    @Override
     public void onEnter() {
         delay = 6 - waiter.getSpeed();
     }

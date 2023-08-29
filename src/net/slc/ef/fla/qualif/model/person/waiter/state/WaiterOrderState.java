@@ -10,6 +10,11 @@ public class WaiterOrderState extends WaiterState {
     }
 
     @Override
+    public String getName() {
+        return "wait cook";
+    }
+
+    @Override
     public void onEnter() {
 
     }

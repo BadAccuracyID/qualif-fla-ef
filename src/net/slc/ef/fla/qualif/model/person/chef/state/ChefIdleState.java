@@ -9,6 +9,11 @@ public class ChefIdleState extends ChefState {
     }
 
     @Override
+    public String getName() {
+        return "idle";
+    }
+
+    @Override
     public void onEnter() {
 
     }

@@ -8,6 +8,11 @@ public class MenuHighScoreState extends MenuState {
     }
 
     @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
     public void onEnter() {
 
     }

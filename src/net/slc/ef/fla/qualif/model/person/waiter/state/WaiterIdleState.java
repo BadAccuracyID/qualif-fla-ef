@@ -9,6 +9,11 @@ public class WaiterIdleState extends WaiterState {
     }
 
     @Override
+    public String getName() {
+        return "idle";
+    }
+
+    @Override
     public void onEnter() {
 
     }
