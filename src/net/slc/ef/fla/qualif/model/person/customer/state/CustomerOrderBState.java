@@ -2,6 +2,7 @@ package net.slc.ef.fla.qualif.model.person.customer.state;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
+import net.slc.ef.fla.qualif.model.person.relation.RelationStorage;
 import net.slc.ef.fla.qualif.model.restaurant.mediator.RestaurantMediator;
 
 // order and waiter is serving
@@ -33,7 +34,7 @@ public class CustomerOrderBState extends CustomerState {
 
     @Override
     public AbstractPerson getServer() {
-        RestaurantMediator.PersonRelationStorage relationStorage = customer.getRestaurant().getRestaurantMediator().getRelationStorage();
+        RelationStorage relationStorage = customer.getRestaurant().getRestaurantMediator().getRelationStorage();
         return relationStorage.getWaiter(customer);
     }
 }

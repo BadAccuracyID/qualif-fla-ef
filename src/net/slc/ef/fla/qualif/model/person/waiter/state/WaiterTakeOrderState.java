@@ -1,9 +1,9 @@
 package net.slc.ef.fla.qualif.model.person.waiter.state;
 
 import net.slc.ef.fla.qualif.model.person.AbstractPerson;
+import net.slc.ef.fla.qualif.model.person.relation.RelationStorage;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.mediator.MediatorAction;
-import net.slc.ef.fla.qualif.model.restaurant.mediator.RestaurantMediator;
 
 public class WaiterTakeOrderState extends WaiterState {
 
@@ -38,7 +38,7 @@ public class WaiterTakeOrderState extends WaiterState {
 
     @Override
     public AbstractPerson getServer() {
-        RestaurantMediator.PersonRelationStorage relationStorage = waiter.getRestaurant().getRestaurantMediator().getRelationStorage();
+        RelationStorage relationStorage = waiter.getRestaurant().getRestaurantMediator().getRelationStorage();
         return relationStorage.getCustomer(waiter);
     }
 

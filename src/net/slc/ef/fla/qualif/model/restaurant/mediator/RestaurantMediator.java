@@ -7,27 +7,25 @@ import net.slc.ef.fla.qualif.model.person.chef.state.ChefDoneState;
 import net.slc.ef.fla.qualif.model.person.chef.state.ChefIdleState;
 import net.slc.ef.fla.qualif.model.person.customer.Customer;
 import net.slc.ef.fla.qualif.model.person.customer.state.*;
+import net.slc.ef.fla.qualif.model.person.relation.Relation;
+import net.slc.ef.fla.qualif.model.person.relation.RelationStorage;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.person.waiter.state.*;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 import net.slc.ef.fla.qualif.model.restaurant.RestaurantFacade;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 public class RestaurantMediator {
 
     private final RestaurantFacade restaurantFacade;
-    private final PersonRelationStorage personRelationStorage;
+    private final RelationStorage relationStorage;
 
     public RestaurantMediator(Restaurant restaurant) {
         this.restaurantFacade = restaurant.getRestaurantFacade();
-        this.personRelationStorage = new PersonRelationStorage();
+        this.relationStorage = new RelationStorage();
     }
 
-    public PersonRelationStorage getRelationStorage() {
-        return personRelationStorage;
+    public RelationStorage getRelationStorage() {
+        return relationStorage;
     }
 
     public void notify(AbstractPerson sender, MediatorAction action) {
@@ -38,7 +36,7 @@ public class RestaurantMediator {
 
                 Waiter availableWaiter;
                 if ((availableWaiter = restaurantFacade.getIdlingWaiter()) != null) {
-                    personRelationStorage.assignWaiter(customer, availableWaiter);
+                    relationStorage.addRelation(new Relation<>(customer, availableWaiter));
 
                     availableWaiter.getWaiterFacade().switchState(new WaiterTakeOrderState(availableWaiter));
                     customer.getCustomerFacade().switchState(new CustomerOrderBState(customer));
@@ -50,7 +48,7 @@ public class RestaurantMediator {
                 assert sender instanceof Waiter;
                 Waiter waiter = (Waiter) sender;
 
-                Customer customer = personRelationStorage.getCustomer(waiter);
+                Customer customer = relationStorage.getCustomer(waiter);
 
                 waiter.getWaiterFacade().switchState(new WaiterWaitCookState(waiter));
                 customer.getCustomerFacade().switchState(new CustomerWaitAState(customer));
@@ -63,26 +61,26 @@ public class RestaurantMediator {
 
                 Chef chef;
                 if ((chef = restaurantFacade.getIdlingChef()) != null) { // chef is idling, send order to them
-                    Customer customer = personRelationStorage.getCustomer(waiter);
+                    Customer customer = relationStorage.getCustomer(waiter);
 
-                    personRelationStorage.assignChef(waiter, chef);
-                    personRelationStorage.assignChef(customer, chef);
+                    relationStorage.addRelation(new Relation<>(waiter, chef));
+                    relationStorage.addRelation(new Relation<>(customer, chef));
 
                     waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter));
                     chef.getChefFacade().switchState(new ChefCookState(chef));
                     customer.getCustomerFacade().switchState(new CustomerWaitBState(customer));
                 } else if ((chef = restaurantFacade.getDoneChef()) != null) { // chef is done cooking, send order to them and take the ready food
                     // store variables
-                    Customer chefCustomer = personRelationStorage.getCustomer(chef);
-                    Customer waiterCustomer = personRelationStorage.getCustomer(waiter);
+                    Customer chefCustomer = relationStorage.getCustomer(chef);
+                    Customer waiterCustomer = relationStorage.getCustomer(waiter);
 
                     // take the ready food
-                    personRelationStorage.assignChef(chefCustomer, chef);
-                    personRelationStorage.assignWaiter(chefCustomer, waiter);
+                    relationStorage.addRelation(new Relation<>(chefCustomer, chef));
+                    relationStorage.addRelation(new Relation<>(chefCustomer, waiter));
 
                     // send order to chef
-                    personRelationStorage.assignChef(waiterCustomer, chef);
-                    personRelationStorage.assignWaiter(waiterCustomer, waiter);
+                    relationStorage.addRelation(new Relation<>(waiterCustomer, chef));
+                    relationStorage.addRelation(new Relation<>(waiterCustomer, waiter));
 
                     // switch states
                     waiter.getWaiterFacade().switchState(new WaiterBringOrderState(waiter));
@@ -107,9 +105,9 @@ public class RestaurantMediator {
 
                 Waiter waiter;
                 if ((waiter = restaurantFacade.getIdlingWaiter()) != null) {
-                    Customer customer = personRelationStorage.getCustomer(chef);
-                    personRelationStorage.assignChef(customer, chef);
-                    personRelationStorage.assignWaiter(customer, waiter);
+                    Customer customer = relationStorage.getCustomer(chef);
+                    relationStorage.addRelation(new Relation<>(customer, chef));
+                    relationStorage.addRelation(new Relation<>(customer, waiter));
 
                     chef.getChefFacade().switchState(new ChefIdleState(chef));
                     waiter.getWaiterFacade().switchState(new WaiterBringOrderState(waiter));
@@ -130,7 +128,7 @@ public class RestaurantMediator {
                 assert sender instanceof Waiter;
                 Waiter waiter = (Waiter) sender;
 
-                Customer customer = personRelationStorage.getCustomer(waiter);
+                Customer customer = relationStorage.getCustomer(waiter);
                 customer.getCustomerFacade().switchState(new CustomerEatState(customer));
                 waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter));
                 break;
@@ -140,12 +138,12 @@ public class RestaurantMediator {
                 assert sender instanceof Customer;
                 Customer customer = (Customer) sender;
 
-                Chef chef = personRelationStorage.getChef(customer);
+                Chef chef = relationStorage.getChef(customer);
 
                 restaurantFacade.removeCustomer(customer);
                 restaurantFacade.addScore(30 * chef.getSkillLevel());
 
-                personRelationStorage.remove(customer);
+                relationStorage.removeRelations(customer);
                 break;
             }
 
@@ -156,7 +154,7 @@ public class RestaurantMediator {
                 restaurantFacade.removeCustomer(customer);
                 restaurantFacade.removeScore(300);
 
-                personRelationStorage.remove(customer);
+                relationStorage.removeRelations(customer);
                 break;
             }
 
@@ -166,149 +164,4 @@ public class RestaurantMediator {
         }
     }
 
-    public enum PersonRelationType {
-        CUSTOMER_WAITER,
-        CUSTOMER_CHEF,
-        WAITER_CUSTOMER,
-        WAITER_CHEF,
-        CHEF_CUSTOMER,
-        CHEF_WAITER
-    }
-
-    public static class PersonRelationKey {
-        private final AbstractPerson person;
-        private final PersonRelationType relation;
-
-        public PersonRelationKey(AbstractPerson person, PersonRelationType relation) {
-            this.person = person;
-            this.relation = relation;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            PersonRelationKey other = (PersonRelationKey) obj;
-            return Objects.equals(person, other.person) && relation == other.relation;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(person, relation);
-        }
-
-        public AbstractPerson getPerson() {
-            return person;
-        }
-
-        public PersonRelationType getRelation() {
-            return relation;
-        }
-    }
-
-
-    public static class PersonRelation {
-        private final PersonRelationKey key;
-        private final AbstractPerson person;
-
-        public PersonRelation(PersonRelationKey key, AbstractPerson person) {
-            this.key = key;
-            this.person = person;
-        }
-
-        public PersonRelationKey getKey() {
-            return key;
-        }
-
-        public AbstractPerson getPerson() {
-            return person;
-        }
-    }
-
-    public static class PersonRelationStorage {
-
-        private final Map<PersonRelationKey, AbstractPerson> relations;
-
-        public PersonRelationStorage() {
-            this.relations = new HashMap<>();
-        }
-
-        public void add(PersonRelation relation) {
-            relations.put(relation.getKey(), relation.getPerson());
-        }
-
-        public void remove(PersonRelation relation) {
-            relations.remove(relation.getKey());
-        }
-
-        public void assignWaiter(Customer customer, Waiter waiter) {
-            PersonRelationKey key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_WAITER);
-            PersonRelation relation = new PersonRelation(key, waiter);
-            add(relation);
-
-            key = new PersonRelationKey(waiter, PersonRelationType.WAITER_CUSTOMER);
-            relation = new PersonRelation(key, customer);
-            add(relation);
-        }
-
-        public void assignChef(Customer customer, Chef chef) {
-            PersonRelationKey key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_CHEF);
-            PersonRelation relation = new PersonRelation(key, chef);
-            add(relation);
-
-            key = new PersonRelationKey(chef, PersonRelationType.CHEF_CUSTOMER);
-            relation = new PersonRelation(key, customer);
-            add(relation);
-        }
-
-        public void assignChef(Waiter waiter, Chef chef) {
-            PersonRelationKey key = new PersonRelationKey(waiter, PersonRelationType.WAITER_CHEF);
-            PersonRelation relation = new PersonRelation(key, chef);
-            add(relation);
-
-            key = new PersonRelationKey(chef, PersonRelationType.CHEF_WAITER);
-            relation = new PersonRelation(key, waiter);
-            add(relation);
-        }
-
-
-        public Waiter getWaiter(Customer customer) {
-            PersonRelationKey key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_WAITER);
-            return (Waiter) relations.get(key);
-        }
-
-        public Chef getChef(Customer customer) {
-            PersonRelationKey key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_CHEF);
-            return (Chef) relations.get(key);
-        }
-
-        public Chef getChef(Waiter waiter) {
-            PersonRelationKey key = new PersonRelationKey(waiter, PersonRelationType.WAITER_CHEF);
-            return (Chef) relations.get(key);
-        }
-
-        public Waiter getWaiter(Chef chef) {
-            PersonRelationKey key = new PersonRelationKey(chef, PersonRelationType.CHEF_WAITER);
-            return (Waiter) relations.get(key);
-        }
-
-        public Customer getCustomer(Waiter waiter) {
-            PersonRelationKey key = new PersonRelationKey(waiter, PersonRelationType.WAITER_CUSTOMER);
-            return (Customer) relations.get(key);
-        }
-
-        public Customer getCustomer(Chef chef) {
-            PersonRelationKey key = new PersonRelationKey(chef, PersonRelationType.CHEF_CUSTOMER);
-            return (Customer) relations.get(key);
-        }
-
-        public void remove(Customer customer) {
-            PersonRelationKey key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_WAITER);
-            remove(new PersonRelation(key, null));
-
-            key = new PersonRelationKey(customer, PersonRelationType.CUSTOMER_CHEF);
-            remove(new PersonRelation(key, null));
-        }
-
-    }
 }
