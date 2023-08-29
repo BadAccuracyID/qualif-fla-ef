@@ -43,6 +43,9 @@ public class RestaurantUpgradeChefAState extends RestaurantState {
             return;
         }
 
+        Chef chef = restaurant.getChefs().get(index);
+
+        restaurant.getRestaurantFacade().selectUpgradingChef(chef);
         restaurant.getRestaurantFacade().switchState(RestaurantUpgradeChefBState.class);
     }
 }
