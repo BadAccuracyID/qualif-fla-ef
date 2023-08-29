@@ -39,7 +39,7 @@ public class TickerTask implements Runnable {
         for (int i = 0; i < this.getLinesNeeded(); i++) {
             Customer customer;
             if ((customer = this.getCustomer(restaurantFacade.getCustomers(), i)) != null) {
-                System.out.printf("%-2s <%-2d>, %15s<%-2s>", customer.getInitial(), customer.getTolerance(), "wait food", customer.getInitial());
+                System.out.printf("%-2s <%-2d>, %15s<%-2s>", customer.getInitial(), customer.getTolerance(), customer.getState().getName(), customer.getInitial());
             } else {
                 System.out.print("                            ");
             }
@@ -47,7 +47,7 @@ public class TickerTask implements Runnable {
 
             Waiter waiter;
             if ((waiter = this.getWaiter(restaurant.getWaiters(), i)) != null) {
-                System.out.printf("<%-2s>, %15s<%-2s>", waiter.getInitial(), "take order", waiter.getInitial());
+                System.out.printf("<%-2s>, %15s<%-2s>", waiter.getInitial(), waiter.getState().getName(), waiter.getInitial());
             } else {
                 System.out.print("                         ");
             }
@@ -55,7 +55,7 @@ public class TickerTask implements Runnable {
 
             Chef chef;
             if ((chef = this.getChef(restaurant.getChefs(), i)) != null) {
-                System.out.printf("<%-2s>, %13s<%-2s>", chef.getInitial(), "cook", chef.getInitial());
+                System.out.printf("<%-2s>, %13s<%-2s>", chef.getInitial(), chef.getState().getName(), chef.getInitial());
             } else {
                 System.out.print("                       ");
             }
