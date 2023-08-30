@@ -21,7 +21,7 @@ import net.slc.ef.fla.qualif.model.restaurant.task.ScannerTask;
 import net.slc.ef.fla.qualif.model.restaurant.task.TickerTask;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -48,14 +48,6 @@ public class RestaurantFacade {
         this.stateMap.put(RestaurantUpgradingState.class, new RestaurantUpgradingState(this.restaurant));
         this.stateMap.put(RestaurantUpgradeChefAState.class, new RestaurantUpgradeChefAState(this.restaurant));
         this.stateMap.put(RestaurantUpgradeWaiterState.class, new RestaurantUpgradeWaiterState(this.restaurant));
-    }
-
-    public void addExecutor(ExecutorService executor) {
-        // idk
-    }
-
-    public void removeExecutor(ExecutorService executor) {
-        // idk
     }
 
     public void start() {
@@ -96,6 +88,10 @@ public class RestaurantFacade {
         this.restaurant.getChefs().add((Chef) chefFactory.create());
 
         this.restaurant.addObserver(new CustomerSpawner());
+    }
+
+    public CompletableFuture<Void> await() {
+        return restaurant.getAsExecutorManager().awaitShutdown();
     }
 
     public void end() {

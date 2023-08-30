@@ -2,6 +2,7 @@ package net.slc.ef.fla.qualif.async;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -26,6 +27,20 @@ public class ASExecutorManager {
     public void shutdown() {
         this.checkExecutor.shutdownNow();
         this.executors.forEach(ASExecutor::shutdown);
+    }
+
+    // ASExecutorManager is not designed to be shutdown mid-runtime, but
+    // this method is here because restaurant can be shutdown mid-runtime.
+    public CompletableFuture<Void> awaitShutdown() {
+        return CompletableFuture.runAsync(() -> {
+            while (!this.checkExecutor.isShutdown()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void checkAll() {

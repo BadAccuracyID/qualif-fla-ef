@@ -1,6 +1,8 @@
 package net.slc.ef.fla.qualif.menu.state;
 
 import net.slc.ef.fla.qualif.menu.Menu;
+import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
+import net.slc.ef.fla.qualif.utils.Utils;
 
 public class MenuPlayState extends MenuState {
 
@@ -15,8 +17,15 @@ public class MenuPlayState extends MenuState {
 
     @Override
     public void onEnter() {
-        System.out.println();
+        Utils.clearScreen();
+        System.out.print("Enter restaurant name: ");
 
+        String input = menu.getMenuFacade().readString();
+        Restaurant restaurant = Restaurant.getInstance(input);
+        restaurant.getRestaurantFacade().start();
+
+        restaurant.getRestaurantFacade().await().join();
+        this.switchState(new MenuMainState(menu));
     }
 
     @Override

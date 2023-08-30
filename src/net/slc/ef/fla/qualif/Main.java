@@ -1,7 +1,6 @@
 package net.slc.ef.fla.qualif;
 
 import net.slc.ef.fla.qualif.menu.Menu;
-import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
 
 public class Main {
 
@@ -21,14 +20,8 @@ public class Main {
         new Main();
     }
 
-    public Menu getMenu() {
-        return menu;
-    }
-
     private void start() {
-//        this.menu = new Menu(this);
-        Restaurant ef = Restaurant.getInstance("EF");
-        ef.getRestaurantFacade().start();
+        this.menu = new Menu(this);
     }
 
 }
