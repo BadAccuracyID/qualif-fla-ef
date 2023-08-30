@@ -47,7 +47,9 @@ public class RestaurantFacade {
         this.stateMap.put(RestaurantHiringState.class, new RestaurantHiringState(this.restaurant));
         this.stateMap.put(RestaurantUpgradingState.class, new RestaurantUpgradingState(this.restaurant));
         this.stateMap.put(RestaurantUpgradeChefAState.class, new RestaurantUpgradeChefAState(this.restaurant));
+        this.stateMap.put(RestaurantUpgradeChefBState.class, new RestaurantUpgradeChefBState(this.restaurant));
         this.stateMap.put(RestaurantUpgradeWaiterState.class, new RestaurantUpgradeWaiterState(this.restaurant));
+        this.stateMap.put(RestaurantEndingState.class, new RestaurantEndingState(this.restaurant));
     }
 
     public void start() {

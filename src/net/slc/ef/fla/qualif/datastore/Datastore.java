@@ -15,9 +15,20 @@ public class Datastore {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private Datastore() {
         this.restaurantData = new ArrayList<>();
-        this.saveFile = new File("save.dat");
+
+        this.saveFile = new File("highscore.txt");
         if (!this.saveFile.exists()) {
-            this.saveFile.getParentFile().mkdirs();
+            try {
+                this.saveFile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        try {
+            this.loadAll();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -29,16 +40,15 @@ public class Datastore {
         return instance;
     }
 
+    public List<RestaurantData> getRestaurantData() {
+        return restaurantData;
+    }
+
     public void registerRestaurantData(RestaurantData restaurantData) {
         this.restaurantData.add(restaurantData);
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void save() throws IOException {
-        if (!this.saveFile.exists()) {
-            this.saveFile.getParentFile().mkdirs();
-        }
-
         // save restaurant data in saveFile with NAME:SCORE format
         BufferedWriter writer = new BufferedWriter(new FileWriter(this.saveFile));
         for (RestaurantData restaurantData : this.restaurantData) {
@@ -60,5 +70,10 @@ public class Datastore {
         }
 
         reader.close();
+    }
+
+    public void sort() {
+        // sort restaurant data by score
+        this.restaurantData.sort((o1, o2) -> o2.getScore() - o1.getScore());
     }
 }

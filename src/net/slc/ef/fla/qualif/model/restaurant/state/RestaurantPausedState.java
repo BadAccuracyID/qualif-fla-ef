@@ -37,7 +37,7 @@ public class RestaurantPausedState extends RestaurantState {
                 break;
             case "3":
                 System.out.println("Exiting the restaurant");
-                restaurant.getRestaurantFacade().end();
+                restaurant.getRestaurantFacade().switchState(RestaurantEndingState.class);
                 break;
             default:
                 System.out.println("Unknown command");
