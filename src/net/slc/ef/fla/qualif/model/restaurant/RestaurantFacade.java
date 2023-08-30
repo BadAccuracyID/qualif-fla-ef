@@ -250,7 +250,7 @@ public class RestaurantFacade {
     public Waiter getIdlingWaiter() {
         Optional<Waiter> optionalWaiter = this.restaurant.getWaiters().stream()
                 .filter(waiter -> waiter.getState().isState(WaiterIdleState.class))
-                .filter(waiter -> !this.restaurant.getBookedPersons().contains(waiter))
+                .filter(waiter -> !this.isBooked(waiter))
                 .findFirst();
 
         if (optionalWaiter.isEmpty()) {
@@ -266,7 +266,7 @@ public class RestaurantFacade {
     public Chef getIdlingChef() {
         Optional<Chef> optionalChef = this.restaurant.getChefs().stream()
                 .filter(chef -> chef.getState().isState(ChefIdleState.class))
-                .filter(chef -> !this.restaurant.getBookedPersons().contains(chef))
+                .filter(chef -> !this.isBooked(chef))
                 .findFirst();
 
         if (optionalChef.isEmpty()) {
@@ -282,7 +282,7 @@ public class RestaurantFacade {
     public Chef getDoneChef() {
         Optional<Chef> optionalChef = this.restaurant.getChefs().stream()
                 .filter(chef -> chef.getState().isState(ChefDoneState.class))
-                .filter(chef -> !this.restaurant.getBookedPersons().contains(chef))
+                .filter(chef -> !this.isBooked(chef))
                 .findFirst();
 
         if (optionalChef.isEmpty()) {
@@ -293,6 +293,10 @@ public class RestaurantFacade {
         this.restaurant.getBookedPersons().add(chef);
 
         return chef;
+    }
+
+    public boolean isBooked(AbstractPerson person) {
+        return this.restaurant.getBookedPersons().contains(person);
     }
 
     public void clearBookedPersons() {

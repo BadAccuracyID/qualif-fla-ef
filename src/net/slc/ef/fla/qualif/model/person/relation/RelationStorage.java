@@ -26,12 +26,16 @@ public class RelationStorage {
     }
 
     public <A extends AbstractPerson, B extends AbstractPerson> B getRelatedPerson(A person, Class<B> relatedPersonClass) {
+        Object last = null;
         for (Relation<? extends AbstractPerson, ? extends AbstractPerson> relation : relations.getOrDefault(person, Collections.emptyList())) {
             if (relatedPersonClass.isInstance(relation.getPerson2())) {
-                return relatedPersonClass.cast(relation.getPerson2());
+                last = relation.getPerson2();
             }
         }
 
+        if (last != null) {
+            return relatedPersonClass.cast(last);
+        }
         return null;
     }
 
@@ -61,6 +65,5 @@ public class RelationStorage {
 
     public void removeRelations(AbstractPerson person) {
         relations.remove(person);
-        relations.values().forEach(relations -> relations.removeIf(relation -> relation.getPerson2().equals(person)));
     }
 }
