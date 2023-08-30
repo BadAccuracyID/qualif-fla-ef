@@ -1,6 +1,7 @@
 package net.slc.ef.fla.qualif.model.restaurant.state;
 
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
+import net.slc.ef.fla.qualif.utils.Utils;
 
 public class RestaurantUpgradingState extends RestaurantState {
 
@@ -10,6 +11,7 @@ public class RestaurantUpgradingState extends RestaurantState {
 
     @Override
     public void onEnter() {
+        Utils.clearScreen();
         System.out.println("----- UPGRADING -----");
         System.out.println();
         System.out.println("        Status      ");
@@ -23,9 +25,9 @@ public class RestaurantUpgradingState extends RestaurantState {
 
         System.out.println("2. Hire more employees");
 
-        System.out.printf("3. Upgrade Waiter (Rp. %d)\n", 0);
+        System.out.printf("3. Upgrade Waiter (Rp. %d)\n", 150);
 
-        System.out.printf("4. Upgrade Cook (Rp. %d)\n", 0);
+        System.out.printf("4. Upgrade Cook (Rp. %d)\n", 150);
 
         System.out.println("5. Back to pause menu");
         System.out.print("> ");
@@ -48,6 +50,7 @@ public class RestaurantUpgradingState extends RestaurantState {
 
                 System.out.println("Adding more seats");
                 restaurant.getRestaurantFacade().addChair();
+                restaurant.getRestaurantFacade().switchState(RestaurantUpgradingState.class);
                 break;
             case "2":
                 System.out.println("Hiring more employees");

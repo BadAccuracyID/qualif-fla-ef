@@ -47,6 +47,7 @@ public class RestaurantHiringState extends RestaurantState {
 
                 System.out.println("Hiring Waiter");
                 restaurant.getRestaurantFacade().hireWaiter();
+                restaurant.getRestaurantFacade().switchState(RestaurantUpgradingState.class);
                 break;
             case "2":
                 int newChefPrice = restaurant.getRestaurantFacade().calculateChefPrice();
@@ -62,6 +63,7 @@ public class RestaurantHiringState extends RestaurantState {
 
                 System.out.println("Hiring Cook");
                 restaurant.getRestaurantFacade().hireChef();
+                restaurant.getRestaurantFacade().switchState(RestaurantUpgradingState.class);
                 break;
             case "3":
                 System.out.println("Back to upgrade menu");
