@@ -4,7 +4,8 @@ import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.state.ServableState;
 import net.slc.ef.fla.qualif.model.person.waiter.state.WaiterIdleState;
 import net.slc.ef.fla.qualif.model.restaurant.Restaurant;
-import net.slc.ef.fla.qualif.state.TickableState;
+
+import java.util.Objects;
 
 public class Waiter extends AbstractPerson {
 
@@ -48,4 +49,17 @@ public class Waiter extends AbstractPerson {
         this.speed = speed;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Waiter) {
+            Waiter other = (Waiter) obj;
+            return this.getInitial().equals(other.getInitial());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getInitial());
+    }
 }

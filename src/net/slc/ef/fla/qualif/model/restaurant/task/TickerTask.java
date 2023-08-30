@@ -84,6 +84,8 @@ public class TickerTask implements Runnable {
         if (restaurantFacade.getRemainingCapacity() > 0) {
             restaurant.notifyObservers();
         }
+
+        restaurantFacade.clearBookedPersons();
     }
 
     private int getLinesNeeded() {

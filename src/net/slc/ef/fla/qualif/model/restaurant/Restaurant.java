@@ -1,6 +1,7 @@
 package net.slc.ef.fla.qualif.model.restaurant;
 
 import net.slc.ef.fla.qualif.async.ASExecutorManager;
+import net.slc.ef.fla.qualif.model.person.AbstractPerson;
 import net.slc.ef.fla.qualif.model.person.chef.Chef;
 import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 import net.slc.ef.fla.qualif.model.restaurant.chair.Chair;
@@ -12,7 +13,9 @@ import net.slc.ef.fla.qualif.observer.IObserver;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Restaurant implements IObservable<Restaurant> {
 
@@ -24,6 +27,8 @@ public class Restaurant implements IObservable<Restaurant> {
     private final List<Chair> chairs;
     private final List<Waiter> waiters;
     private final List<Chef> chefs;
+
+    private final Set<AbstractPerson> bookedPersons;
 
     private final List<IObserver<Restaurant>> observers;
 
@@ -43,6 +48,7 @@ public class Restaurant implements IObservable<Restaurant> {
         this.chairs = new ArrayList<>();
         this.waiters = new ArrayList<>();
         this.chefs = new ArrayList<>();
+        this.bookedPersons = new HashSet<>();
         this.observers = new ArrayList<>();
 
         this.restaurantFacade = new RestaurantFacade(this);
@@ -144,5 +150,9 @@ public class Restaurant implements IObservable<Restaurant> {
 
     public void setUpgradingChef(Chef upgradingChef) {
         this.upgradingChef = upgradingChef;
+    }
+
+    public Set<AbstractPerson> getBookedPersons() {
+        return bookedPersons;
     }
 }

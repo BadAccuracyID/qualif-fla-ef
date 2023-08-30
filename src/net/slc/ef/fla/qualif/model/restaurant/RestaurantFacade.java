@@ -248,24 +248,55 @@ public class RestaurantFacade {
     }
 
     public Waiter getIdlingWaiter() {
-        return this.restaurant.getWaiters().stream()
+        Optional<Waiter> optionalWaiter = this.restaurant.getWaiters().stream()
                 .filter(waiter -> waiter.getState().isState(WaiterIdleState.class))
-                .findFirst()
-                .orElse(null);
+                .filter(waiter -> !this.restaurant.getBookedPersons().contains(waiter))
+                .findFirst();
+
+        if (optionalWaiter.isEmpty()) {
+            return null;
+        }
+
+        Waiter waiter = optionalWaiter.get();
+        this.restaurant.getBookedPersons().add(waiter);
+
+        return waiter;
     }
 
     public Chef getIdlingChef() {
-        return this.restaurant.getChefs().stream()
+        Optional<Chef> optionalChef = this.restaurant.getChefs().stream()
                 .filter(chef -> chef.getState().isState(ChefIdleState.class))
-                .findFirst()
-                .orElse(null);
+                .filter(chef -> !this.restaurant.getBookedPersons().contains(chef))
+                .findFirst();
+
+        if (optionalChef.isEmpty()) {
+            return null;
+        }
+
+        Chef chef = optionalChef.get();
+        this.restaurant.getBookedPersons().add(chef);
+
+        return chef;
     }
 
     public Chef getDoneChef() {
-        return this.restaurant.getChefs().stream()
+        Optional<Chef> optionalChef = this.restaurant.getChefs().stream()
                 .filter(chef -> chef.getState().isState(ChefDoneState.class))
-                .findFirst()
-                .orElse(null);
+                .filter(chef -> !this.restaurant.getBookedPersons().contains(chef))
+                .findFirst();
+
+        if (optionalChef.isEmpty()) {
+            return null;
+        }
+
+        Chef chef = optionalChef.get();
+        this.restaurant.getBookedPersons().add(chef);
+
+        return chef;
+    }
+
+    public void clearBookedPersons() {
+        this.restaurant.getBookedPersons().clear();
     }
 
     public void selectUpgradingChef(Chef chef) {

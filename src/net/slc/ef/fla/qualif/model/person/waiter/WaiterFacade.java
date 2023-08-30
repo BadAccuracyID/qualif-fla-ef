@@ -13,6 +13,7 @@ public class WaiterFacade {
     public void switchState(ServableState state) {
         this.waiter.getState().onExit();
 
+        this.waiter.getRestaurant().getBookedPersons().add(this.waiter);
         this.waiter.setState(state);
         this.waiter.getState().onEnter();
     }

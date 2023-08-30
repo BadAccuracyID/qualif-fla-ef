@@ -5,8 +5,16 @@ import net.slc.ef.fla.qualif.model.person.waiter.Waiter;
 
 public class WaiterIdleState extends WaiterState {
 
+    private final String s;
+
     public WaiterIdleState(Waiter waiter) {
         super(waiter);
+        this.s = "none";
+    }
+
+    public WaiterIdleState(Waiter waiter, String s) {
+        super(waiter);
+        this.s = s;
     }
 
     @Override

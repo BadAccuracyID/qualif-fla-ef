@@ -34,11 +34,11 @@ public class RestaurantMediator {
                 assert sender instanceof Customer;
                 Customer customer = (Customer) sender;
 
-                Waiter availableWaiter;
-                if ((availableWaiter = restaurantFacade.getIdlingWaiter()) != null) {
-                    relationStorage.addRelation(new Relation<>(customer, availableWaiter));
+                Waiter waiter;
+                if ((waiter = restaurantFacade.getIdlingWaiter()) != null) {
+                    relationStorage.addRelation(new Relation<>(customer, waiter));
 
-                    availableWaiter.getWaiterFacade().switchState(new WaiterTakeOrderState(availableWaiter));
+                    waiter.getWaiterFacade().switchState(new WaiterTakeOrderState(waiter));
                     customer.getCustomerFacade().switchState(new CustomerOrderBState(customer));
                 }
                 break;
@@ -49,6 +49,7 @@ public class RestaurantMediator {
                 Waiter waiter = (Waiter) sender;
 
                 Customer customer = relationStorage.getCustomer(waiter);
+                relationStorage.addRelation(new Relation<>(customer, waiter));
 
                 waiter.getWaiterFacade().switchState(new WaiterWaitCookState(waiter));
                 customer.getCustomerFacade().switchState(new CustomerWaitAState(customer));
@@ -66,7 +67,7 @@ public class RestaurantMediator {
                     relationStorage.addRelation(new Relation<>(waiter, chef));
                     relationStorage.addRelation(new Relation<>(customer, chef));
 
-                    waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter));
+                    waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter, "REQUEST_COOK"));
                     chef.getChefFacade().switchState(new ChefCookState(chef));
                     customer.getCustomerFacade().switchState(new CustomerWaitBState(customer));
                 } else if ((chef = restaurantFacade.getDoneChef()) != null) { // chef is done cooking, send order to them and take the ready food
@@ -108,6 +109,7 @@ public class RestaurantMediator {
                     Customer customer = relationStorage.getCustomer(chef);
                     relationStorage.addRelation(new Relation<>(customer, chef));
                     relationStorage.addRelation(new Relation<>(customer, waiter));
+                    relationStorage.addRelation(new Relation<>(chef, waiter));
 
                     chef.getChefFacade().switchState(new ChefIdleState(chef));
                     waiter.getWaiterFacade().switchState(new WaiterBringOrderState(waiter));
@@ -130,7 +132,7 @@ public class RestaurantMediator {
 
                 Customer customer = relationStorage.getCustomer(waiter);
                 customer.getCustomerFacade().switchState(new CustomerEatState(customer));
-                waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter));
+                waiter.getWaiterFacade().switchState(new WaiterIdleState(waiter, "DELIVER_TO_CUSTOMER"));
                 break;
             }
 

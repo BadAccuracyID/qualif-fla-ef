@@ -13,6 +13,7 @@ public class ChefFacade {
     public void switchState(ServableState state) {
         this.chef.getState().onExit();
 
+        this.chef.getRestaurant().getBookedPersons().add(this.chef);
         this.chef.setState(state);
         this.chef.getState().onEnter();
     }
