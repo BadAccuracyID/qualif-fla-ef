@@ -37,6 +37,10 @@ public class MenuHighScoreState extends MenuState {
 
         int i = 1;
         for (RestaurantData restaurantData : datastore.getRestaurantData()) {
+            if (i >= 10) {
+                break;
+            }
+
             System.out.printf(" %3d. | %-15s | %6d \n", i++, restaurantData.getName(), restaurantData.getScore());
         }
         System.out.println("=================================");
