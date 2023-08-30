@@ -9,7 +9,7 @@ import java.util.*;
 
 public class RelationStorage {
 
-    private final Map<AbstractPerson, List<Relation<? extends AbstractPerson, ? extends AbstractPerson>>> relations;
+    private final Map<AbstractPerson, Queue<Relation<? extends AbstractPerson, ? extends AbstractPerson>>> relations;
 
     public RelationStorage() {
         this.relations = new HashMap<>();
@@ -21,21 +21,17 @@ public class RelationStorage {
     }
 
     private <A extends AbstractPerson, B extends AbstractPerson> void actualAddRelation(Relation<A, B> relation) {
-        relations.putIfAbsent(relation.getPerson1(), new ArrayList<>());
+        relations.putIfAbsent(relation.getPerson1(), Collections.asLifoQueue(new ArrayDeque<>()));
         relations.get(relation.getPerson1()).add(relation);
     }
 
     public <A extends AbstractPerson, B extends AbstractPerson> B getRelatedPerson(A person, Class<B> relatedPersonClass) {
-        Object last = null;
-        for (Relation<? extends AbstractPerson, ? extends AbstractPerson> relation : relations.getOrDefault(person, Collections.emptyList())) {
+        for (Relation<? extends AbstractPerson, ? extends AbstractPerson> relation : relations.getOrDefault(person, Collections.asLifoQueue(new ArrayDeque<>()))) {
             if (relatedPersonClass.isInstance(relation.getPerson2())) {
-                last = relation.getPerson2();
+                return relatedPersonClass.cast(relation.getPerson2());
             }
         }
 
-        if (last != null) {
-            return relatedPersonClass.cast(last);
-        }
         return null;
     }
 
